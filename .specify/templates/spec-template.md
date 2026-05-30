@@ -8,6 +8,8 @@
 
 **Input**: User description: "$ARGUMENTS"
 
+> **Язык**: вся спецификация MUST быть на русском языке (конституция GPI, принцип I).
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--

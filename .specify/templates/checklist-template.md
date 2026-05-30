@@ -20,17 +20,41 @@
   ============================================================================
 -->
 
-## [Category 1]
+## Язык и документация
 
-- [ ] CHK001 First checklist item with clear action
-- [ ] CHK002 Second checklist item
-- [ ] CHK003 Third checklist item
+- [ ] CHK001 Спецификация и связанные артефакты на русском языке
 
-## [Category 2]
+## Трёхъязычность (ru / ka / en)
 
-- [ ] CHK004 Another category item
-- [ ] CHK005 Item with specific criteria
-- [ ] CHK006 Final item in this category
+- [ ] CHK002 Каждая публичная страница имеет эквивалент на русском, грузинском и английском
+- [ ] CHK003 Переключатель языка доступен на всех публичных страницах (ru, ka, en)
+- [ ] CHK004 Контент PayloadCMS локализован (ru, ka и en)
+- [ ] CHK005 UI-строки переведены на все три языка
+
+## SEO и GEO
+
+- [ ] CHK006 Один h1 и корректная иерархия h2–h6 на каждой публичной странице (все локали)
+- [ ] CHK007 Метатеги: title, description, canonical (все локали)
+- [ ] CHK008 Open Graph: og:title, og:description, og:image, og:url, og:type (все локали)
+- [ ] CHK009 JSON-LD разметка соответствует типу страницы (все локали)
+- [ ] CHK010 hreflang и взаимные ссылки между ru/ka/en версиями
+
+## Производительность
+
+- [ ] CHK011 Google PageSpeed ≥ 90 (mobile и desktop, все локали)
+- [ ] CHK012 Core Web Vitals (LCP, INP, CLS) в зелёной зоне
+
+## Тестирование
+
+- [ ] CHK013 Unit- и integration-тесты для нового/изменённого кода (все локали)
+- [ ] CHK014 Все тесты проходят в CI
+
+## Адаптивная вёрстка
+
+- [ ] CHK015 Вёрстка корректна на mobile (320px+), tablet и desktop (1920px+)
+- [ ] CHK016 Нет горизонтальной прокрутки и обрезания контента на контрольных breakpoints
+- [ ] CHK017 Touch-элементы ≥ 44×44px на мобильных
+- [ ] CHK018 Изображения и медиа масштабируются без поломки layout
 
 ## Notes
 

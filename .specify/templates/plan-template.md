@@ -18,29 +18,41 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript / Node.js 20+ (Next.js App Router, React 19)
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Primary Dependencies**: PayloadCMS, Next.js, React, PostgreSQL adapter
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Storage**: PostgreSQL (единственная СУБД проекта GPI)
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Testing**: Vitest/Jest (unit), Playwright/Cypress (E2E при необходимости) — обязательное полное покрытие
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Target Platform**: Статический сайт (SSG/ISR), деплой на Node.js-хостинг или edge
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Project Type**: Сайт агентства недвижимости GPI (PayloadCMS + Next.js)
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Performance Goals**: Google PageSpeed Insights ≥ 90 (mobile и desktop)
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
+**Constraints**: Статическая генерация публичных страниц; SEO/GEO (метатеги, OG, JSON-LD); спецификации на русском; трёхъязычность сайта (ru/ka/en); адаптивная вёрстка (mobile-first)
 
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: [уточнить для фичи: число страниц, коллекций, объектов недвижимости]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Проверить соответствие `.specify/memory/constitution.md` (все пункты MUST пройти):
+
+- [ ] **I. Русский язык**: spec и plan написаны на русском
+- [ ] **II. Статика**: публичные страницы — SSG/ISR, без необоснованного SSR
+- [ ] **III. Best practices**: PayloadCMS, Next.js, React — по официальным рекомендациям
+- [ ] **IV. Тесты**: для каждой user story запланированы unit/integration/E2E тесты
+- [ ] **V. SEO/GEO**: иерархия заголовков, метатеги, OG, JSON-LD для публичных страниц
+- [ ] **VI. PageSpeed**: целевой показатель ≥ 90; оптимизация изображений и JS
+- [ ] **VII. PostgreSQL**: данные и контент через PostgreSQL, миграции версионированы
+- [ ] **VIII. Трёхъязычность**: каждая публичная страница на ru, ka и en; hreflang; переключатель языка; локализация в PayloadCMS
+- [ ] **IX. Адаптивность**: mobile-first; breakpoints mobile/tablet/desktop; без горизонтальной прокрутки; touch targets ≥ 44px
+
+При нарушении — заполнить Complexity Tracking с обоснованием.
 
 ## Project Structure
 
@@ -65,43 +77,25 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── app/                    # Next.js App Router (публичные страницы)
+│   ├── [locale]/           # Локализованные маршруты (ru, ka, en)
+│   ├── (frontend)/         # Статические маршруты
+│   └── (payload)/          # PayloadCMS admin и API
+├── collections/            # Коллекции PayloadCMS (localized fields)
+├── components/             # React-компоненты
+├── i18n/                   # Переводы UI-строк (ru, ka, en)
+├── lib/                    # Утилиты, SEO/JSON-LD helpers
+└── payload.config.ts       # Конфигурация PayloadCMS (localization)
 
 tests/
-├── contract/
+├── unit/
 ├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+└── e2e/
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Монорепозиторий PayloadCMS + Next.js (см. дерево выше).
+Публичный сайт — статическая генерация; админка PayloadCMS — отдельный маршрут.
 
 ## Complexity Tracking
 

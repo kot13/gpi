@@ -1,50 +1,233 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+==================
+Version change: 1.2.0 → 1.3.0
+Modified principles: N/A
+Added sections:
+  - IX. Адаптивная вёрстка (mobile-first)
+Removed sections: N/A
+Templates:
+  - .specify/templates/plan-template.md ✅ updated
+  - .specify/templates/checklist-template.md ✅ updated
+  - .specify/templates/tasks-template.md ✅ updated
+  - .cursor/rules/specify-rules.mdc ✅ updated
+Follow-up TODOs: none
+-->
+
+# GPI Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Спецификации на русском языке
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Все артефакты Spec Kit (`spec.md`, `plan.md`, `tasks.md`, чеклисты, комментарии
+к требованиям) ДОЛЖНЫ быть написаны на русском языке. Пользовательские сценарии,
+критерии приёмки и функциональные требования формулируются на русском.
+Технические идентификаторы (имена файлов, переменных, API-эндпоинтов) могут
+оставаться на английском в соответствии с конвенциями кодовой базы.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Обоснование**: единый язык документации снижает риск потери смысла при
+передаче требований команде и заказчику агентства недвижимости GPI. Язык
+публичного сайта регулируется принципом VIII.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Статическая архитектура сайта
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+Публичная часть сайта GPI MUST быть статической: HTML/CSS/JS генерируются на
+этапе сборки (SSG/ISR через Next.js + PayloadCMS). Динамический рендеринг на
+запрос (SSR) для публичных страниц ЗАПРЕЩЁН, если это не обосновано в
+`plan.md` и не одобрено как исключение в Complexity Tracking.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Обоснование**: статическая генерация обеспечивает предсказуемую
+производительность, надёжность и высокие оценки PageSpeed для SEO.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. PayloadCMS, Next.js и React — лучшие практики
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Код MUST следовать официальным best practices PayloadCMS, Next.js (App Router)
+и React как их части:
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Коллекции, поля, хуки и access control — по документации PayloadCMS
+- Маршруты, layouts, metadata API и Server/Client Components — по документации
+  Next.js
+- Компоненты React — функциональные, с явным разделением серверной и клиентской
+  логики
+- Переиспользование встроенных возможностей фреймворков вместо самописных
+  решений, если они покрывают задачу
+
+**Обоснование**: единообразие с экосистемой PayloadCMS/Next.js снижает
+технический долг и упрощает сопровождение.
+
+### IV. Полное покрытие тестами (NON-NEGOTIABLE)
+
+Весь прикладной код MUST быть покрыт автоматизированными тестами. Для каждой
+фичи в `tasks.md` MUST присутствовать фаза тестов до или параллельно с
+реализацией. Минимальный набор:
+
+- Unit-тесты: утилиты, хуки, компоненты, бизнес-логика
+- Integration-тесты: коллекции PayloadCMS, API-маршруты, сборка страниц
+- E2E-тесты (при необходимости): критические пользовательские сценарии
+
+PR без тестов для нового или изменённого поведения MUST быть отклонён.
+
+**Обоснование**: сайт агентства недвижимости — публичный продукт; регрессии
+недопустимы.
+
+### V. SEO и GEO
+
+Каждая публичная страница MUST соответствовать требованиям SEO и GEO
+(Generative Engine Optimization):
+
+- Корректная иерархия заголовков: один `h1`, логичная вложенность `h2`–`h6`
+- Полный набор метатегов: `title`, `description`, `canonical`, `robots` при
+  необходимости
+- Open Graph: `og:title`, `og:description`, `og:image`, `og:url`, `og:type`
+- JSON-LD: структурированные данные (`RealEstateAgent`, `WebSite`, `BreadcrumbList`,
+  `Product`/`Offer` для объектов недвижимости — по типу страницы)
+- Локализованные метаданные и `hreflang` для каждой языковой версии страницы
+  (см. принцип VIII)
+- Семантическая HTML-разметка и alt-тексты для изображений
+
+Проверка SEO/GEO MUST входить в чеклист каждой фичи с публичными страницами.
+
+**Обоснование**: органический трафик и видимость в поисковых и generative-системах
+— ключевой канал для агентства недвижимости.
+
+### VI. Производительность (PageSpeed ≥ 90)
+
+Целевой показатель Google PageSpeed Insights — **90 и выше** для mobile и
+desktop на всех публичных страницах. Обязательные практики:
+
+- Оптимизация изображений (форматы, размеры, lazy loading)
+- Минимизация клиентского JavaScript; приоритет Server Components
+- Core Web Vitals: LCP, INP, CLS в зелёной зоне
+- Проверка PageSpeed MUST выполняться перед merge фич с UI-изменениями
+
+**Обоснование**: скорость загрузки напрямую влияет на SEO, конверсию и
+пользовательский опыт.
+
+### VII. PostgreSQL как единственная СУБД
+
+Хранение контента и данных приложения MUST использовать PostgreSQL. Миграции,
+схема и seed-данные MUST быть версионированы в репозитории. Другие СУБД
+допускаются только при явном обосновании в Complexity Tracking.
+
+**Обоснование**: PayloadCMS нативно поддерживает PostgreSQL; единая СУБД
+упрощает деплой и резервное копирование.
+
+### VIII. Трёхъязычность сайта (русский, грузинский и английский)
+
+Сайт GPI MUST быть трёхъязычным с первого запуска: **русский (`ru`)**,
+**грузинский (`ka`)** и **английский (`en`)**. Отложенная локализация
+ЗАПРЕЩЕНА.
+
+Обязательные требования:
+
+- Каждая публичная страница MUST иметь полноценный эквивалент на всех трёх
+  языках
+- Контент в PayloadCMS MUST поддерживать локализацию (localized fields или
+  эквивалентный механизм PayloadCMS i18n) для `ru`, `ka` и `en`
+- URL-структура MUST явно отражать локаль (например, `/ru/...`, `/ka/...`
+  и `/en/...`)
+- Переключатель языка MUST быть доступен на всех публичных страницах и
+  включать все три локали
+- SEO: `hreflang`, локализованные `title`/`description`/OG/JSON-LD для каждой
+  локали; корректный `canonical` и взаимные ссылки между языковыми версиями
+- UI-строки (навигация, кнопки, системные сообщения) MUST быть переведены на
+  все три языка
+- Тесты MUST покрывать все три локали для каждой публичной страницы и user story
+
+Новые фичи MUST проектироваться с учётом трёх языков с самого начала;
+добавление языков постфактум без рефакторинга MUST быть отклонено на review.
+
+**Обоснование**: GPI работает на рынке Грузии и с международной аудиторией;
+трёхъязычность с запуска дешевле архитектурно и критична для SEO на локальном
+и международном рынках.
+
+### IX. Адаптивная вёрстка (mobile-first)
+
+Вёрстка всех публичных страниц и UI-компонентов MUST быть адаптивной и
+корректно отображаться на экранах **от мобильных телефонов до десктопа**.
+Отложенная адаптация под мобильные устройства ЗАПРЕЩЕНА.
+
+Обязательные требования:
+
+- Подход **mobile-first**: базовые стили — для мобильных, расширение — через
+  media queries / container queries для планшетов и десктопа
+- Поддерживаемый диапазон viewport: от **320px** (мобильные) до **1920px+**
+  (широкие десктопы) без горизонтальной прокрутки и обрезания контента
+- Контрольные breakpoints MUST быть задокументированы в `plan.md` фичи
+  (минимум: mobile, tablet, desktop)
+- Интерактивные элементы MUST быть удобны для touch: минимальный размер
+  кликабельной области **44×44px** на мобильных
+- Изображения и медиа MUST масштабироваться без нарушения вёрстки (`srcset`,
+  `sizes`, responsive containers)
+- Типографика и отступы MUST оставаться читаемыми на всех breakpoints
+- Тесты MUST включать проверку ключевых страниц и компонентов на mobile,
+  tablet и desktop (visual regression, E2E или эквивалент)
+
+Проверка адаптивности MUST входить в чеклист каждой фичи с UI-изменениями.
+PR с поломкой вёрстки на любом из контрольных breakpoints MUST быть отклонён.
+
+**Обоснование**: значительная часть трафика агентств недвижимости — с мобильных
+устройств; некорректная вёрстка снижает конверсию, SEO и оценки PageSpeed.
+
+## Технический стек и ограничения
+
+| Компонент | Технология |
+|-----------|------------|
+| CMS | PayloadCMS |
+| Фреймворк | Next.js (App Router) |
+| UI | React |
+| База данных | PostgreSQL |
+| Тип сайта | Статический (SSG/ISR) |
+| Язык спецификаций | Русский |
+| Языки сайта | Русский, грузинский и английский (с первого запуска) |
+| Тестирование | Обязательное полное покрытие |
+| SEO/GEO | Метатеги, OG, JSON-LD, иерархия заголовков |
+| Производительность | PageSpeed ≥ 90 |
+| Вёрстка | Адаптивная (mobile-first, 320px–1920px+) |
+
+Дополнительные ограничения:
+
+- Контент управляется через PayloadCMS Admin; публичный сайт — read-only
+- Секреты и credentials MUST храниться в переменных окружения, не в репозитории
+- Зависимости MUST быть зафиксированы (lockfile)
+
+## Рабочий процесс и контроль качества
+
+1. **Спецификация** (`/speckit-specify`): user stories, FR, SC — на русском
+2. **План** (`/speckit-plan`): Constitution Check MUST пройти все 9 принципов
+3. **Задачи** (`/speckit-tasks`): каждая user story включает задачи на тесты
+4. **Реализация** (`/speckit-implement`): red-green-refactor; тесты зелёные до merge
+5. **Чеклист** (`/speckit-checklist`): SEO/GEO, PageSpeed и адаптивность для UI-фич
+6. **Анализ** (`/speckit-analyze`): cross-artifact consistency перед merge
+
+Quality gates перед merge:
+
+- [ ] Все тесты проходят
+- [ ] Покрытие нового кода — 100% (или обоснованное исключение)
+- [ ] SEO/GEO чеклист пройден для публичных страниц (все три локали)
+- [ ] PageSpeed ≥ 90 на затронутых страницах (все три локали)
+- [ ] Спецификация и план на русском языке
+- [ ] Контент и UI доступны на русском, грузинском и английском
+- [ ] Адаптивная вёрстка проверена на mobile, tablet и desktop
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Настоящая конституция имеет приоритет над прочими практиками проекта GPI.
+Любое изменение принципов MUST:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. Быть задокументировано с обоснованием
+2. Получить явное одобрение владельца проекта
+3. Сопровождаться обновлением зависимых шаблонов в `.specify/templates/`
+4. Инкрементировать `CONSTITUTION_VERSION` по semver:
+   - MAJOR: удаление или переопределение принципа
+   - MINOR: новый принцип или существенное расширение
+   - PATCH: уточнения формулировок без изменения смысла
+
+Compliance review MUST выполняться при каждом `/speckit-plan` (Constitution
+Check) и перед merge PR. Нарушения без записи в Complexity Tracking MUST
+блокировать merge.
+
+Runtime-руководство: актуальный `plan.md` фичи и `.specify/memory/constitution.md`.
+
+**Version**: 1.3.0 | **Ratified**: 2026-05-30 | **Last Amended**: 2026-05-30

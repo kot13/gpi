@@ -3,6 +3,23 @@ alwaysApply: true
 ---
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
+
+**Актуальный план**: [specs/001-cms-foundation/plan.md](specs/001-cms-foundation/plan.md)
+
+Ключевые принципы (см. `.specify/memory/constitution.md`):
+- Спецификации на русском языке
+- Сайт на трёх языках: русский, грузинский и английский (с первого запуска)
+- Статический сайт (SSG/ISR)
+- PostgreSQL
+- Полное покрытие тестами
+- SEO/GEO: метатеги, OG, JSON-LD, иерархия заголовков
+- PageSpeed ≥ 90
+- Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
+
+**Стек фичи 001-cms-foundation**: Payload CMS 3, Next.js 15, PostgreSQL, Tailwind CSS 4, Vitest, Playwright.
+
+**Структура**: `src/collections/`, `src/globals/`, `src/app/(frontend)/[locale]/`, `src/components/layout/`.
+
+**Команды**: см. [quickstart.md](specs/001-cms-foundation/quickstart.md)
 <!-- SPECKIT END -->

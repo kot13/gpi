@@ -9,7 +9,7 @@ description: "Task list template for feature implementation"
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Тесты ОБЯЗАТЕЛЬНЫ (конституция GPI, принцип IV). Каждая user story MUST включать задачи на unit-, integration- и при необходимости E2E-тесты.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -80,9 +80,9 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 1 (ОБЯЗАТЕЛЬНО) ⚠️
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: Написать тесты ПЕРВЫМИ, убедиться что они FAIL до реализации**
 
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
@@ -106,7 +106,7 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 2 (ОБЯЗАТЕЛЬНО) ⚠️
 
 - [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
@@ -128,7 +128,7 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
+### Tests for User Story 3 (ОБЯЗАТЕЛЬНО) ⚠️
 
 - [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
@@ -154,7 +154,12 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
+- [ ] TXXX [P] Дополнительные unit-тесты в tests/unit/
+- [ ] TXXX [P] SEO/GEO: метатеги, OG, JSON-LD, иерархия заголовков (ru, ka, en)
+- [ ] TXXX [P] Локализация контента и UI-строк (ru, ka, en)
+- [ ] TXXX [P] hreflang и переключатель языка (ru, ka, en)
+- [ ] TXXX [P] Проверка PageSpeed ≥ 90 на затронутых страницах (все локали)
+- [ ] TXXX [P] Проверка адаптивной вёрстки на mobile, tablet и desktop
 - [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
 
