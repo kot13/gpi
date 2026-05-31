@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      {
+        pathname: '/images/**',
+      },
     ],
     qualities: [100],
     remotePatterns: [
@@ -45,6 +48,7 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   reactStrictMode: true,
+  devIndicators: false,
   redirects,
   turbopack: {
     root: path.resolve(dirname),

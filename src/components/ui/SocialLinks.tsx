@@ -22,7 +22,7 @@ export function SocialLinks({ links }: { links?: SocialLink[] | null }) {
   const sorted = [...links].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       {sorted.map((link, i) => {
         const Icon = socialIconMap[link.platform]
         return (
@@ -32,9 +32,9 @@ export function SocialLinks({ links }: { links?: SocialLink[] | null }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={platformLabels[link.platform]}
-            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-gpi-muted hover:text-gpi-accent transition-colors"
+            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-gpi-muted hover:text-gpi-brand transition-colors"
           >
-            <Icon className="w-5 h-5" />
+            <Icon className="w-10 h-10" />
           </Link>
         )
       })}

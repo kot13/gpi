@@ -1,5 +1,13 @@
 {
   "blog": "Блог",
+  "blogHeroTitle": "Блог GPI",
+  "blogHeroIntro": "Мы делимся только проверенной информацией",
+  "blogHeroSubtitle": "Откройте мир знаний о недвижимости ГРУЗИИ",
+  "blogReadingTime": "Средняя скорость прочтения 1 блога от 3 до 5 мин",
+  "blogEmpty": "Записей пока нет. Скоро здесь появятся статьи.",
+  "blogCtaApply": "Оставить заявку",
+  "blogCtaWhatsApp": "WhatsApp",
+  "blogCtaTelegram": "Telegram",
   "readMore": "Подробнее",
   "notFound": "Страница не найдена",
   "home": "Главная"

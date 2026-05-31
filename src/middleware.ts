@@ -24,7 +24,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  return NextResponse.next()
+  const response = NextResponse.next()
+  response.headers.set('x-locale', first)
+  return response
 }
 
 export const config = {

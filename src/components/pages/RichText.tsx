@@ -14,9 +14,10 @@ type Props = {
 export function PageRichText({ data, className, enableGutter = true }: Props) {
   return (
     <RichText
-      className={cn('[&_h1]:text-2xl [&_h1]:font-bold', className)}
+      className={cn('[&_h1]:text-2xl [&_h1]:font-bold gpi-prose', className)}
       data={data}
       enableGutter={enableGutter}
+      enableProse={false}
     />
   )
 }

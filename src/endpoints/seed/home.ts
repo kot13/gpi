@@ -12,6 +12,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
 }) => {
   return {
     slug: 'home',
+    title: 'GPI — Georgia Private Investment',
     _status: 'published',
     hero: {
       type: 'highImpact',
@@ -20,16 +21,8 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           link: {
             type: 'custom',
             appearance: 'default',
-            label: 'All posts',
-            url: '/posts',
-          },
-        },
-        {
-          link: {
-            type: 'custom',
-            appearance: 'outline',
-            label: 'Contact',
-            url: '/contact',
+            label: 'Блог',
+            url: '/ru/blog',
           },
         },
       ],
@@ -666,10 +659,9 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
       },
     ],
     meta: {
-      description: 'An open-source website built with Payload and Next.js.',
+      description: 'Real estate agency in Georgia — GPI',
       image: heroImage.id,
-      title: 'Payload Website Template',
+      title: 'GPI — Georgia Private Investment',
     },
-    title: 'Home',
   }
 }

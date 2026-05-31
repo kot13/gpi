@@ -36,36 +36,40 @@ export const Card: React.FC<{
   return (
     <article
       className={cn(
-        'gpi-blog-card border border-gpi-border rounded-lg overflow-hidden bg-gpi-bg-secondary hover:border-gpi-accent transition-colors hover:cursor-pointer',
+        'gpi-blog-card group border border-gpi-border rounded-[var(--radius-card)] overflow-hidden bg-gpi-bg-secondary hover:border-gpi-brand transition-colors hover:cursor-pointer shadow-sm',
         className,
       )}
       ref={card.ref}
     >
-      <div className="relative w-full aspect-video">
+      <div className="relative w-full aspect-[16/10] bg-gpi-border">
         {image && typeof image !== 'string' ? (
           <Media
             resource={image}
             fill
-            imgClassName="object-cover"
+            imgClassName="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             size="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
           />
         ) : (
-          <div className="bg-gpi-border h-full w-full" />
+          <div className="bg-gpi-border h-full w-full" aria-hidden />
         )}
       </div>
-      <div className="p-4">
+      <div className="p-5">
         {showCategories && categoryTitle && (
-          <div className="uppercase text-sm mb-2 text-gpi-accent">{categoryTitle}</div>
+          <div className="uppercase text-xs tracking-wide mb-2 text-gpi-brand font-semibold">
+            {categoryTitle}
+          </div>
         )}
         {titleToUse && (
-          <h3 className="text-lg font-semibold text-white mb-2">
-            <Link className="hover:text-gpi-accent" href={href} ref={link.ref}>
+          <h3 className="text-lg font-semibold text-gpi-text mb-2 font-gpi-heading">
+            <Link className="hover:text-gpi-brand transition-colors" href={href} ref={link.ref}>
               {titleToUse}
             </Link>
           </h3>
         )}
         {cardDescription && (
-          <p className="text-sm text-gpi-muted line-clamp-3">{cardDescription.replace(/\s/g, ' ')}</p>
+          <p className="text-sm text-gpi-muted line-clamp-3 leading-relaxed">
+            {cardDescription.replace(/\s/g, ' ')}
+          </p>
         )}
       </div>
     </article>

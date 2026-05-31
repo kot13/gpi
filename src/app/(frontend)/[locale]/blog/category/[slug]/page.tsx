@@ -58,10 +58,10 @@ export default async function CategoryPage({ params: paramsPromise }: Args) {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-8 pb-24">
       <PageClient />
-      <div className="container mb-16">
-        <h1 className="text-3xl md:text-5xl font-bold text-white">{category.title}</h1>
+      <div className="container mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold text-gpi-text font-gpi-heading">{category.title}</h1>
       </div>
 
       <div className="container mb-8">

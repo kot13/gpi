@@ -27,7 +27,7 @@ export const Pagination: React.FC<{
   const hasExtraNextPages = page + 1 < totalPages
 
   return (
-    <div className={cn('my-12', className)}>
+    <div className={cn('my-12 gpi-pagination', className)}>
       <PaginationComponent>
         <PaginationContent>
           <PaginationItem>

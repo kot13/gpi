@@ -9,12 +9,13 @@ import React from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { isValidLocale } from '@/lib/i18n/config'
+import { isValidLocale, type Locale } from '@/lib/i18n/config'
 import { notFound } from 'next/navigation'
 import { safeStaticParams } from '@/lib/payload/safeStaticParams'
 import { getAllBlogSlugs, getPostBySlug } from '@/lib/payload/queries/blog'
 import { blogPostingJsonLd } from '@/lib/seo/jsonLd'
 import { getServerSideURL } from '@/utilities/getURL'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 export async function generateStaticParams() {
   return safeStaticParams(async () => getAllBlogSlugs())
@@ -38,6 +39,8 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const headerData = await getCachedGlobal('header', 1, locale)()
+
   const baseUrl = getServerSideURL()
   const postUrl = `${baseUrl}/${locale}/blog/${decodedSlug}`
   const imageUrl =
@@ -55,14 +58,18 @@ export default async function Post({ params: paramsPromise }: Args) {
   })
 
   return (
-    <article className="pt-16 pb-16">
+    <article className="pt-8 pb-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
 
       <div className="container max-w-3xl mx-auto py-8">
-        <BlogPostView post={post} locale={locale} />
+        <BlogPostView
+          post={post}
+          locale={locale as Locale}
+          socialLinks={headerData?.socialLinks}
+        />
       </div>
 
       {post.relatedPosts && post.relatedPosts.length > 0 && (

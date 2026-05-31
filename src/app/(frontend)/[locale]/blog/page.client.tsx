@@ -1,14 +1,8 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
-import React, { useEffect } from 'react'
+import React from 'react'
 
+/** Blog pages use the default light GPI header — no theme override needed */
 const PageClient: React.FC = () => {
-  /* Force the header to be dark mode while we have an image behind it */
-  const { setHeaderTheme } = useHeaderTheme()
-
-  useEffect(() => {
-    setHeaderTheme('light')
-  }, [setHeaderTheme])
   return <React.Fragment />
 }
 

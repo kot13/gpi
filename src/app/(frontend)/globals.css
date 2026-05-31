@@ -43,17 +43,29 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
-  --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
-  --color-gpi-bg: #0a0a0a;
-  --color-gpi-bg-secondary: #111111;
-  --color-gpi-text: #f5f5f5;
-  --color-gpi-muted: #a3a3a3;
-  --color-gpi-accent: #d4a853;
-  --color-gpi-border: #262626;
+  --font-mono: ui-monospace, monospace;
+  --font-sans: var(--font-manrope), Arial, sans-serif;
+  --font-gpi-body: var(--font-manrope), Arial, sans-serif;
+  --font-gpi-heading: var(--font-unbounded), sans-serif;
+  --color-gpi-brand: #7e2226;
+  --color-gpi-bg: #ffffff;
+  --color-gpi-bg-secondary: #f5f5f5;
+  --color-gpi-text: #414141;
+  --color-gpi-muted: #999999;
+  --color-gpi-border: #e5e5e5;
+  --header-height: 70px;
+  --radius-card: 16px;
 }
 
 @layer utilities {
+  .font-gpi-body {
+    font-family: var(--font-gpi-body);
+  }
+
+  .font-gpi-heading {
+    font-family: var(--font-gpi-heading);
+  }
+
   .container {
     width: 100%;
     margin-inline: auto;
@@ -216,7 +228,32 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    @apply bg-gpi-bg text-gpi-text min-h-[100vh] flex flex-col font-[family-name:var(--font-gpi-body)];
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-gpi-heading), var(--font-gpi-body), sans-serif;
+  }
+}
+
+@layer components {
+  .gpi-prose {
+    @apply prose max-w-none text-gpi-text;
+    font-family: var(--font-gpi-body);
+  }
+
+  .gpi-prose :where(h2, h3, h4) {
+    @apply text-gpi-text font-semibold;
+    font-family: var(--font-gpi-heading), var(--font-gpi-body), sans-serif;
+  }
+
+  .gpi-prose :where(a) {
+    @apply text-gpi-brand underline-offset-2 hover:underline;
+  }
+
+  .gpi-prose :where(p, li) {
+    @apply leading-relaxed;
   }
 }
 

@@ -1,46 +1,27 @@
 import type { Payload } from 'payload'
+import type { Header, Page } from '@/payload-types'
 
 import { LOCALES, type Locale } from '@/lib/i18n/config'
 
-type LocalizedCategory = {
-  id: string | number
-  ru: { title: string; slug: string; description?: string }
-  ka: { title: string; slug: string; description?: string }
-  en: { title: string; slug: string; description?: string }
+import { lexicalHeading, lexicalParagraph, lexicalRoot } from './lexical'
+import { minimalPlaceholderLayout } from './pages/minimalLayout'
+import { stripNestedIds } from './stripNestedIds'
+
+type PageLocaleData = {
+  title: string
+  slug: string
+  hero?: Page['hero']
 }
 
-// Reserved for when categories.title is localized (requires `npm run db:push`)
-const _categoryTranslations: Record<string, Omit<LocalizedCategory, 'id'>> = {
-  Technology: {
-    ru: { title: 'Технологии', slug: 'technology', description: 'Новости технологий' },
-    ka: { title: 'ტექნოლოგიები', slug: 'technology', description: 'ტექნოლოგიების სიახლეები' },
-    en: { title: 'Technology', slug: 'technology', description: 'Technology news' },
-  },
-  News: {
-    ru: { title: 'Новости', slug: 'news', description: 'Актуальные новости' },
-    ka: { title: 'სიახლეები', slug: 'news', description: 'აქტუალური სიახლეები' },
-    en: { title: 'News', slug: 'news', description: 'Latest news' },
-  },
-  Finance: {
-    ru: { title: 'Финансы', slug: 'finance', description: 'Финансы и инвестиции' },
-    ka: { title: 'ფინანსები', slug: 'finance', description: 'ფინანსები და ინვესტიციები' },
-    en: { title: 'Finance', slug: 'finance', description: 'Finance and investment' },
-  },
-  Design: {
-    ru: { title: 'Дизайн', slug: 'design', description: 'Дизайн и архитектура' },
-    ka: { title: 'დიზაინი', slug: 'design', description: 'დიზაინი და არქიტექტურა' },
-    en: { title: 'Design', slug: 'design', description: 'Design and architecture' },
-  },
-  Software: {
-    ru: { title: 'Софт', slug: 'software', description: 'Программное обеспечение' },
-    ka: { title: 'პროგრამები', slug: 'software', description: 'პროგრამული უზრუნველყოფა' },
-    en: { title: 'Software', slug: 'software', description: 'Software industry' },
-  },
-  Engineering: {
-    ru: { title: 'Инженерия', slug: 'engineering', description: 'Инженерные решения' },
-    ka: { title: 'ინჟინერია', slug: 'engineering', description: 'საინჟინრო გადაწყვეტილებები' },
-    en: { title: 'Engineering', slug: 'engineering', description: 'Engineering solutions' },
-  },
+type SeedPageIds = {
+  home: number
+  blog: number
+}
+
+type SeedLocalizedOptions = {
+  pageIds: SeedPageIds
+  /** Hero image for localized home (highImpact requires media). */
+  homeHeroMediaId: number
 }
 
 const postTranslations: Record<
@@ -100,31 +81,217 @@ const postTranslations: Record<
   },
 }
 
-const homeTranslations: Record<Locale, { title: string }> = {
-  ru: { title: 'GPI — Georgia Private Investment' },
-  ka: { title: 'GPI — Georgia Private Investment' },
-  en: { title: 'GPI — Georgia Private Investment' },
+const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
+  home: {
+    ru: {
+      title: 'GPI — Georgia Private Investment',
+      slug: 'home',
+      hero: {
+        type: 'highImpact',
+        richText: lexicalRoot([
+          lexicalHeading('GPI — Georgia Private Investment'),
+          lexicalParagraph(
+            'Агентство недвижимости в Грузии: инвестиции, аренда и сопровождение сделок.',
+          ),
+        ]),
+      },
+    },
+    ka: {
+      title: 'GPI — საქართველოს კერძო ინვესტიციები',
+      slug: 'home',
+      hero: {
+        type: 'highImpact',
+        richText: lexicalRoot([
+          lexicalHeading('GPI — საქართველოს კერძო ინვესტიციები'),
+          lexicalParagraph(
+            'უძრავი ქონების სააგენტო საქართველოში: ინვესტიციები, გაქირავება და გარიგებების თანხლება.',
+          ),
+        ]),
+      },
+    },
+    en: {
+      title: 'GPI — Georgia Private Investment',
+      slug: 'home',
+      hero: {
+        type: 'highImpact',
+        richText: lexicalRoot([
+          lexicalHeading('GPI — Georgia Private Investment'),
+          lexicalParagraph(
+            'Real estate agency in Georgia: investment, rentals, and transaction support.',
+          ),
+        ]),
+      },
+    },
+  },
+  blog: {
+    ru: {
+      title: 'Блог',
+      slug: 'blog',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('Блог GPI'),
+          lexicalParagraph('Мы делимся только проверенной информацией'),
+          lexicalParagraph('Откройте мир знаний о недвижимости ГРУЗИИ'),
+          lexicalParagraph('Средняя скорость прочтения 1 блога от 3 до 5 мин'),
+        ]),
+      },
+    },
+    ka: {
+      title: 'ბლოგი',
+      slug: 'blog',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('GPI ბლოგი'),
+          lexicalParagraph('ჩვენ ვუზიარებთ მხოლოდ შემოწმებულ ინფორმაციას'),
+          lexicalParagraph('გახსენით ცოდნის სამყარო უძრავი ქონების შესახებ საქართველოში'),
+          lexicalParagraph('საშუალო კითხვის დრო: 3-5 წუთი'),
+        ]),
+      },
+    },
+    en: {
+      title: 'Blog',
+      slug: 'blog',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('GPI Blog'),
+          lexicalParagraph('We share only verified information'),
+          lexicalParagraph('Discover the world of real estate knowledge in GEORGIA'),
+          lexicalParagraph('Average reading time per post: 3 to 5 minutes'),
+        ]),
+      },
+    },
+  },
+  '404': {
+    ru: {
+      title: 'Страница не найдена',
+      slug: '404',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('404'),
+          lexicalParagraph('Страница не найдена'),
+        ]),
+      },
+    },
+    ka: {
+      title: 'გვერდი ვერ მოიძებნა',
+      slug: '404',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('404'),
+          lexicalParagraph('გვერდი ვერ მოიძებნა'),
+        ]),
+      },
+    },
+    en: {
+      title: 'Page not found',
+      slug: '404',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('404'),
+          lexicalParagraph('Page not found'),
+        ]),
+      },
+    },
+  },
 }
 
-const headerNavTranslations: Record<Locale, Array<{ label: string; url: string }>> = {
-  ru: [
-    { label: 'Каталог', url: 'https://gpi-realty.ge/' },
-    { label: 'Блог', url: '/ru/blog' },
-    { label: 'Контакты', url: '/ru/contacts' },
-  ],
-  ka: [
-    { label: 'კატალოგი', url: 'https://gpi-realty.ge/' },
-    { label: 'ბლოგი', url: '/ka/blog' },
-    { label: 'კონტაქტი', url: '/ka/contacts' },
-  ],
-  en: [
-    { label: 'Catalog', url: 'https://gpi-realty.ge/' },
-    { label: 'Blog', url: '/en/blog' },
-    { label: 'Contacts', url: '/en/contacts' },
-  ],
+const headerNavLabels: Record<Locale, { home: string; blog: string }> = {
+  ru: { home: 'Главная', blog: 'Блог' },
+  ka: { home: 'მთავარი', blog: 'ბლოგი' },
+  en: { home: 'Home', blog: 'Blog' },
 }
 
-export async function seedLocalizedContent(payload: Payload): Promise<void> {
+const notFoundLinkLabels: Record<Locale, string> = {
+  ru: 'На главную',
+  ka: 'მთავარზე',
+  en: 'Back to home',
+}
+
+type NavItemKey = 'home' | 'blog'
+
+const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog']
+
+type NavItemRow = NonNullable<Header['navItems']>[number]
+
+function buildNavItems(locale: Locale, pageIds: SeedPageIds): NavItemRow[] {
+  return NAV_ITEM_ORDER.map((key) => ({
+    link: {
+      type: 'reference' as const,
+      label: headerNavLabels[locale][key],
+      reference: { relationTo: 'pages' as const, value: pageIds[key] },
+    },
+  }))
+}
+
+function buildNavItemsWithIds(
+  existingItems: NonNullable<Header['navItems']>,
+  locale: Locale,
+  pageIds: SeedPageIds,
+): NavItemRow[] {
+  return existingItems.map((item, index) => {
+    const key = NAV_ITEM_ORDER[index]
+    if (!key || !item.id) return item
+
+    return {
+      id: item.id,
+      link: {
+        type: 'reference' as const,
+        label: headerNavLabels[locale][key],
+        reference: { relationTo: 'pages' as const, value: pageIds[key] },
+        newTab: item.link?.newTab ?? null,
+      },
+    }
+  })
+}
+
+/**
+ * Localized link labels live on shared array rows — create rows once (ru), then set
+ * labels per locale using the same row ids.
+ */
+async function seedGlobalNavItems(
+  payload: Payload,
+  slug: 'header' | 'footer',
+  pageIds: SeedPageIds,
+): Promise<void> {
+  await payload.updateGlobal({
+    slug,
+    locale: 'ru',
+    data: { navItems: buildNavItems('ru', pageIds) },
+    context: { disableRevalidate: true },
+  })
+
+  const base = await payload.findGlobal({
+    slug,
+    locale: 'ru',
+    depth: 0,
+  })
+
+  const rows = base.navItems
+  if (!rows?.length) {
+    payload.logger.warn(`— ${slug}: nav items were not created`)
+    return
+  }
+
+  for (const locale of LOCALES) {
+    await payload.updateGlobal({
+      slug,
+      locale,
+      data: { navItems: buildNavItemsWithIds(rows, locale, pageIds) },
+      context: { disableRevalidate: true },
+    })
+  }
+}
+
+export async function seedLocalizedContent(
+  payload: Payload,
+  { pageIds, homeHeroMediaId }: SeedLocalizedOptions,
+): Promise<void> {
   payload.logger.info('— Seeding localized content (ru/ka/en)...')
 
   const posts = await payload.find({ collection: 'posts', limit: 100, pagination: false })
@@ -144,36 +311,83 @@ export async function seedLocalizedContent(payload: Payload): Promise<void> {
     }
   }
 
-  const homePage = await payload.find({
+  const pages = await payload.find({
     collection: 'pages',
-    where: { slug: { equals: 'home' } },
-    limit: 1,
+    locale: 'ru',
+    limit: 100,
+    pagination: false,
+    select: { slug: true },
   })
 
-  if (homePage.docs[0]) {
+  for (const page of pages.docs) {
+    if (!page.slug) continue
+    const translations = pageTranslations[page.slug]
+    if (!translations) continue
+
     for (const locale of LOCALES) {
+      const { title, slug, hero } = translations[locale]
+      let heroData: Page['hero'] | undefined = hero
+
+      if (page.slug === 'home' && hero?.richText) {
+        heroData = {
+          type: 'highImpact',
+          media: homeHeroMediaId,
+          richText: hero.richText,
+          links: [
+            {
+              link: {
+                type: 'reference' as const,
+                label: headerNavLabels[locale].blog,
+                reference: { relationTo: 'pages' as const, value: pageIds.blog },
+                appearance: 'default' as const,
+              },
+            },
+          ],
+        }
+      } else if (page.slug === '404' && hero) {
+        heroData = {
+          type: 'lowImpact',
+          richText: hero.richText,
+          links: [
+            {
+              link: {
+                type: 'reference' as const,
+                label: notFoundLinkLabels[locale],
+                reference: { relationTo: 'pages' as const, value: pageIds.home },
+                appearance: 'default' as const,
+              },
+            },
+          ],
+        }
+      }
+
+      const pageData: Record<string, unknown> = {
+        title,
+        slug,
+        generateSlug: false,
+      }
+
+      if (heroData) {
+        pageData.hero = stripNestedIds(heroData)
+      }
+
+      // Localized layout blocks must not reuse row ids from the default locale
+      if (page.slug === 'blog' || page.slug === '404') {
+        pageData.layout = stripNestedIds(minimalPlaceholderLayout())
+      }
+
       await payload.update({
         collection: 'pages',
-        id: homePage.docs[0].id,
+        id: page.id,
         locale,
-        data: homeTranslations[locale],
+        data: pageData,
         context: { disableRevalidate: true },
       })
     }
   }
 
-  for (const locale of LOCALES) {
-    await payload.updateGlobal({
-      slug: 'header',
-      locale,
-      data: {
-        navItems: headerNavTranslations[locale].map((item) => ({
-          link: { type: 'custom' as const, label: item.label, url: item.url },
-        })),
-      },
-      context: { disableRevalidate: true },
-    })
-  }
+  await seedGlobalNavItems(payload, 'header', pageIds)
+  await seedGlobalNavItems(payload, 'footer', pageIds)
 
   payload.logger.info('— Localized seed complete')
 }

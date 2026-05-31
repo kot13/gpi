@@ -1,5 +1,13 @@
 {
   "blog": "Blog",
+  "blogHeroTitle": "GPI Blog",
+  "blogHeroIntro": "We share only verified information",
+  "blogHeroSubtitle": "Discover the world of real estate knowledge in GEORGIA",
+  "blogReadingTime": "Average reading time per post: 3 to 5 minutes",
+  "blogEmpty": "No posts yet. Articles coming soon.",
+  "blogCtaApply": "Leave a request",
+  "blogCtaWhatsApp": "WhatsApp",
+  "blogCtaTelegram": "Telegram",
   "readMore": "Read more",
   "notFound": "Page not found",
   "home": "Home"

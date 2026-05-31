@@ -10,6 +10,7 @@ import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { validateLocalizedPublish } from '@/hooks/validateLocalizedPublish'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import {
@@ -58,6 +59,7 @@ export const Pages: CollectionConfig<'pages'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -73,6 +75,7 @@ export const Pages: CollectionConfig<'pages'> = {
               type: 'blocks',
               blocks: [CallToAction, Content, MediaBlock, Archive],
               required: true,
+              localized: true,
               admin: {
                 initCollapsed: true,
               },
@@ -116,11 +119,11 @@ export const Pages: CollectionConfig<'pages'> = {
         position: 'sidebar',
       },
     },
-    slugField(),
+    slugField({ localized: true }),
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, validateLocalizedPublish],
     afterDelete: [revalidateDelete],
   },
   versions: {

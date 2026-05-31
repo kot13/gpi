@@ -8,6 +8,8 @@ import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
 import { seedLocalizedContent } from './localized'
+import { blogPage } from './pages/blog'
+import { notFoundPage } from './pages/not-found'
 
 const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts']
 
@@ -185,10 +187,25 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
+  const homeDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+  })
+
+  const blogDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: blogPage(),
+  })
+
   await payload.create({
     collection: 'pages',
     depth: 0,
-    data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+    context: { disableRevalidate: true },
+    data: notFoundPage(),
   })
 
   payload.logger.info(`— Seeding globals...`)
@@ -197,16 +214,13 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'header',
       data: {
-        navItems: [
-          { link: { type: 'custom', label: 'Каталог', url: 'https://gpi-realty.ge/' } },
-          { link: { type: 'custom', label: 'Блог', url: '/ru/blog' } },
-          { link: { type: 'custom', label: 'Контакты', url: '/ru/contacts' } },
-        ],
+        navItems: [],
         socialLinks: [
           { platform: 'telegram', url: 'https://t.me/gpi', order: 1 },
           { platform: 'whatsapp', url: 'https://wa.me/', order: 2 },
         ],
       },
+      context: { disableRevalidate: true },
     }),
     payload.updateGlobal({
       slug: 'footer',
@@ -215,15 +229,19 @@ export const seed = async ({
         identificationNumber: '445623111',
         address: 'Georgia, Batumi city, Selim Khimshiashvili St. 17',
         copyrightText: '© Georgia Private Investment 2019-2026',
-        navItems: [
-          { link: { type: 'custom', label: 'Каталог', url: 'https://gpi-realty.ge/' } },
-          { link: { type: 'custom', label: 'Контакты', url: '/ru/contacts' } },
-        ],
+        navItems: [],
       },
+      context: { disableRevalidate: true },
     }),
   ])
 
-  await seedLocalizedContent(payload)
+  await seedLocalizedContent(payload, {
+    pageIds: {
+      home: Number(homeDoc.id),
+      blog: Number(blogDoc.id),
+    },
+    homeHeroMediaId: Number(imageHomeDoc.id),
+  })
 
   payload.logger.info('Seeded database successfully!')
 }

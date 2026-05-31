@@ -47,9 +47,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <Header />
+      <Header locale={localeParam} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer locale={localeParam} />
     </>
   )
 }

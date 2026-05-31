@@ -6,10 +6,20 @@ test.describe('Pages @ru', () => {
     await expect(page).toHaveURL(/\/ru/)
   })
 
-  test('home page loads', async ({ page }) => {
+  test('home page loads with GPI header', async ({ page }) => {
     await page.goto('/ru')
-    await expect(page.locator('header')).toBeVisible()
+    await expect(page.locator('header.gpi-header')).toBeVisible()
+    await expect(page.locator('main h1')).toHaveCount(1)
   })
+})
+
+test.describe('Pages locales', () => {
+  for (const locale of ['ka', 'en'] as const) {
+    test(`home loads @${locale}`, async ({ page }) => {
+      await page.goto(`/${locale}`)
+      await expect(page.locator('header')).toBeVisible()
+    })
+  }
 })
 
 test.describe('Responsive @ru', () => {

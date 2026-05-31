@@ -1,5 +1,5 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -7,47 +7,65 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
+import { BurgerButton } from '@/components/layout/BurgerButton'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
+import { MobileNav } from '@/components/layout/MobileNav'
 import { SocialLinks } from '@/components/ui/SocialLinks'
-import { DEFAULT_LOCALE } from '@/lib/i18n/config'
+import type { Locale } from '@/lib/i18n/config'
+import { getLocalizedPath } from '@/lib/i18n/config'
+
+import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
+  locale: Locale
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  const [theme, setTheme] = useState<string | null>(null)
-  const { headerTheme, setHeaderTheme } = useHeaderTheme()
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
+  const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
-    setHeaderTheme(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMobileOpen(false)
   }, [pathname])
 
   useEffect(() => {
-    if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerTheme])
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
 
   return (
-    <header
-      className="gpi-header border-b border-gpi-border bg-gpi-bg sticky top-0 z-50"
-      {...(theme ? { 'data-theme': theme } : {})}
-    >
-      <div className="container py-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <Link href={`/${DEFAULT_LOCALE}`} className="shrink-0">
-          <Logo loading="eager" priority="high" className="h-8 w-auto" />
-        </Link>
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
-          <HeaderNav data={data} />
-          <div className="flex items-center gap-4">
+    <>
+      <header className="gpi-header sticky top-0 z-50 h-[var(--header-height)] border-b border-gpi-border bg-white/90 backdrop-blur-sm">
+        <div className="container h-full flex items-center justify-between gap-4">
+          <Link href={getLocalizedPath(locale, '')} className="shrink-0">
+            <Logo loading="eager" priority="high" className="h-[34px] w-auto" />
+          </Link>
+
+          <div className="hidden min-[981px]:flex flex-1 items-center justify-center">
+            <HeaderNav data={data} locale={locale} />
+          </div>
+
+          <div className="hidden min-[981px]:flex items-center gap-4 shrink-0">
             <SocialLinks links={data.socialLinks as Parameters<typeof SocialLinks>[0]['links']} />
             <LanguageSwitcher />
           </div>
+
+          <div className="min-[981px]:hidden">
+            <BurgerButton isOpen={mobileOpen} onClick={() => setMobileOpen((v) => !v)} />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <MobileNav
+        isOpen={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        navItems={data.navItems}
+        socialLinks={data.socialLinks}
+        locale={locale}
+      />
+    </>
   )
 }

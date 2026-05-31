@@ -32,7 +32,9 @@ export async function generateStaticParams() {
         select: { slug: true },
       })
       pages.docs?.forEach(({ slug }) => {
-        if (slug && slug !== 'home') params.push({ locale, slug })
+        if (slug && slug !== 'home' && slug !== 'blog' && slug !== '404') {
+          params.push({ locale, slug })
+        }
       })
     }
 
@@ -75,8 +77,8 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      <RenderHero {...hero} locale={locale} />
+      <RenderBlocks blocks={layout} locale={locale} />
     </article>
   )
 }

@@ -7,7 +7,15 @@ type LocalizedDoc = Record<string, unknown> & {
   _status?: 'draft' | 'published'
 }
 
-export const validateLocalizedPublish: CollectionBeforeChangeHook = ({ data, req, operation }) => {
+export const validateLocalizedPublish: CollectionBeforeChangeHook = ({
+  data,
+  req,
+  operation,
+  context,
+}) => {
+  // Seed and other internal updates pass partial locale data without re-validating publish rules
+  if (context?.disableRevalidate) return data
+
   const doc = data as LocalizedDoc
   if (doc._status !== 'published') return data
 

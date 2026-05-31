@@ -1,5 +1,13 @@
 {
   "blog": "ბლოგი",
+  "blogHeroTitle": "GPI ბლოგი",
+  "blogHeroIntro": "ჩვენ ვუზიარებთ მხოლოდ შემოწმებულ ინფორმაციას",
+  "blogHeroSubtitle": "გახსენით ცოდნის სამყარო უძრავი ქონების შესახებ საქართველოში",
+  "blogReadingTime": "საშუალო კითხვის დრო: 3-5 წუთი",
+  "blogEmpty": "ჩანაწერები ჯერ არ არის.",
+  "blogCtaApply": "განაცხადის დატოვება",
+  "blogCtaWhatsApp": "WhatsApp",
+  "blogCtaTelegram": "Telegram",
   "readMore": "დეტალურად",
   "notFound": "გვერდი ვერ მოიძებნა",
   "home": "მთავარი"

@@ -35,6 +35,10 @@ export function revalidateGlobalLayout(): void {
   for (const locale of LOCALES) {
     revalidatePath(`/${locale}`, 'layout')
   }
+  for (const locale of LOCALES) {
+    revalidateTag(`global_header_${locale}`)
+    revalidateTag(`global_footer_${locale}`)
+  }
   revalidateTag('global_header')
   revalidateTag('global_footer')
 }

@@ -17,6 +17,11 @@ for (const vp of viewports) {
       expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1)
     })
 
+    test('single h1 on home', async ({ page }) => {
+      await page.goto('/ru')
+      await expect(page.locator('main h1')).toHaveCount(1)
+    })
+
     test('no horizontal scroll on blog', async ({ page }) => {
       await page.goto('/ru/blog')
       const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth)

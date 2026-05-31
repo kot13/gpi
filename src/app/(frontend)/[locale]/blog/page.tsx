@@ -1,11 +1,14 @@
 import type { Metadata } from 'next/types'
 
 import { BlogList } from '@/components/blog/BlogList'
+import { RenderHero } from '@/heros/RenderHero'
+import { getMessages } from '@/lib/i18n/getMessages'
+import { getPageBySlug } from '@/lib/payload/queries/pages'
 import { getPosts } from '@/lib/payload/queries/blog'
+import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { isValidLocale, type Locale } from '@/lib/i18n/config'
 import { notFound } from 'next/navigation'
-import { buildPageMetadata } from '@/lib/seo/metadata'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -16,33 +19,33 @@ export default async function BlogPage({ params: paramsPromise }: Args) {
   const { locale: localeParam } = await paramsPromise
   if (!isValidLocale(localeParam)) notFound()
   const locale = localeParam as Locale
+  const t = getMessages(locale)
 
-  const posts = await getPosts(locale, 1, 12)
+  const [page, posts] = await Promise.all([
+    getPageBySlug('blog', locale),
+    getPosts(locale, 1, 12),
+  ])
+
+  if (!page) notFound()
 
   return (
-    <div className="pt-24 pb-24">
+    <article className="pt-8 pb-8">
       <PageClient />
-      <div className="container mb-16">
-        <h1 className="text-3xl md:text-5xl font-bold text-white">Блог</h1>
-      </div>
-
+      <RenderHero {...page.hero} locale={locale} />
       <BlogList
         posts={posts.docs}
         locale={locale}
         page={posts.page ?? undefined}
         totalPages={posts.totalPages}
+        emptyMessage={t.blogEmpty}
       />
-    </div>
+    </article>
   )
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { locale: localeParam } = await paramsPromise
   if (!isValidLocale(localeParam)) return {}
-  return buildPageMetadata({
-    title: 'Блог',
-    description: 'Статьи и гайды GPI',
-    locale: localeParam,
-    path: '/blog',
-  })
+  const page = await getPageBySlug('blog', localeParam)
+  return generateMeta({ doc: page })
 }

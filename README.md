@@ -10,7 +10,7 @@
 - **Блог** — записи с заглавным изображением, описанием, контентом; рубрики опциональны
 - **Шапка и подвал** — навигация, соцсети, юридический блок (настраиваются в admin)
 - **SEO/GEO** — meta, Open Graph, JSON-LD, hreflang, sitemap
-- **Дизайн** — тёмная тема и фирменные токены GPI
+- **Дизайн** — светлая тема GPI по [gpi-realty.ge](https://gpi-realty.ge/): Manrope/Unbounded, бордовый акцент `#7E2226`, burger-menu ≤980px
 
 Публичные URL:
 
@@ -23,6 +23,19 @@
 | `/{locale}/blog/{slug}` | запись блога |
 | `/{locale}/blog/category/{slug}` | рубрика |
 | `/admin` | панель Payload CMS |
+
+### Design System (002-gpi-site-design)
+
+| Token | Значение |
+|-------|----------|
+| Brand | `#7E2226` |
+| Text | `#414141` |
+| Background | `#FFFFFF` |
+| Fonts | Manrope (body, substitute Circe), Unbounded (headings) |
+| Burger breakpoint | ≤980px |
+| Touch target | min 44×44px |
+
+CSS tokens: `src/app/(frontend)/globals.css` · Typed map: `src/lib/design/tokens.ts`
 
 ---
 

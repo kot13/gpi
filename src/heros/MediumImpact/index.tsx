@@ -1,23 +1,32 @@
 import React from 'react'
 
 import type { Page } from '@/payload-types'
+import type { Locale } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
+export const MediumImpactHero: React.FC<Page['hero'] & { locale?: Locale }> = ({
+  links,
+  media,
+  richText,
+  locale = DEFAULT_LOCALE,
+}) => {
   return (
     <div className="">
       <div className="container mb-8">
-        {richText && <RichText className="mb-6" data={richText} enableGutter={false} />}
+        {richText && (
+          <RichText className="mb-6" data={richText} enableGutter={false} locale={locale} />
+        )}
 
         {Array.isArray(links) && links.length > 0 && (
           <ul className="flex gap-4">
             {links.map(({ link }, i) => {
               return (
                 <li key={i}>
-                  <CMSLink {...link} />
+                  <CMSLink {...link} locale={locale} />
                 </li>
               )
             })}
