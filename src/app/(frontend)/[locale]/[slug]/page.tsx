@@ -71,9 +71,10 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout } = page
+  const isSlideshowHero = hero?.type === 'slideshow'
 
   return (
-    <article className="pt-16 pb-24">
+    <article className={isSlideshowHero ? 'pb-24' : 'pt-16 pb-24'} data-hero-slideshow={isSlideshowHero || undefined}>
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}

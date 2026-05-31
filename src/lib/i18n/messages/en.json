@@ -10,5 +10,8 @@
   "blogCtaTelegram": "Telegram",
   "readMore": "Read more",
   "notFound": "Page not found",
-  "home": "Home"
+  "home": "Home",
+  "slideshowPrev": "Previous slide",
+  "slideshowNext": "Next slide",
+  "slideshowSlideN": "Slide {n}"
 }

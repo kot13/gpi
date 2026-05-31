@@ -147,7 +147,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'slideshow';
     richText?: {
       root: {
         type: string;
@@ -188,6 +188,32 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    /**
+     * От 1 до 10 слайдов. Навигация и автопрокрутка — при 2+ слайдах.
+     */
+    slides?:
+      | {
+          image: number | Media;
+          title: string;
+          subtitle: string;
+          link?: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+          };
+          buttonLabel: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock)[];
   meta?: {
@@ -779,6 +805,23 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        slides?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              subtitle?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                  };
+              buttonLabel?: T;
+              id?: T;
+            };
       };
   layout?:
     | T

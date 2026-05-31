@@ -10,5 +10,8 @@
   "blogCtaTelegram": "Telegram",
   "readMore": "Подробнее",
   "notFound": "Страница не найдена",
-  "home": "Главная"
+  "home": "Главная",
+  "slideshowPrev": "Предыдущий слайд",
+  "slideshowNext": "Следующий слайд",
+  "slideshowSlideN": "Слайд {n}"
 }

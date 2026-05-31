@@ -1,10 +1,16 @@
 import type { CollectionBeforeChangeHook } from 'payload'
 import type { Locale } from '@/hooks/slugify'
 
+import {
+  validateSlideshowHeroForLocale,
+  type SlideshowHeroFields,
+} from '@/hooks/validateSlideshowHero'
+
 const LOCALES: Locale[] = ['ru', 'ka', 'en']
 
 type LocalizedDoc = Record<string, unknown> & {
   _status?: 'draft' | 'published'
+  hero?: SlideshowHeroFields
 }
 
 export const validateLocalizedPublish: CollectionBeforeChangeHook = ({
@@ -29,6 +35,8 @@ export const validateLocalizedPublish: CollectionBeforeChangeHook = ({
     if (missing.length) {
       throw new Error(`Cannot publish: missing required fields for locale "${locale}": ${missing.join(', ')}`)
     }
+
+    validateSlideshowHeroForLocale(doc.hero, locale)
   }
   return data
 }

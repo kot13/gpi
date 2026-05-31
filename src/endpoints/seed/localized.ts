@@ -5,6 +5,7 @@ import { LOCALES, type Locale } from '@/lib/i18n/config'
 
 import { lexicalHeading, lexicalParagraph, lexicalRoot } from './lexical'
 import { minimalPlaceholderLayout } from './pages/minimalLayout'
+import { buildHomeSlideshowHero } from './slideshowSlides'
 import { stripNestedIds } from './stripNestedIds'
 
 type PageLocaleData = {
@@ -20,7 +21,7 @@ type SeedPageIds = {
 
 type SeedLocalizedOptions = {
   pageIds: SeedPageIds
-  /** Hero image for localized home (highImpact requires media). */
+  /** Hero image for localized home slideshow slides. */
   homeHeroMediaId: number
 }
 
@@ -83,45 +84,9 @@ const postTranslations: Record<
 
 const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
   home: {
-    ru: {
-      title: 'GPI — Georgia Private Investment',
-      slug: 'home',
-      hero: {
-        type: 'highImpact',
-        richText: lexicalRoot([
-          lexicalHeading('GPI — Georgia Private Investment'),
-          lexicalParagraph(
-            'Агентство недвижимости в Грузии: инвестиции, аренда и сопровождение сделок.',
-          ),
-        ]),
-      },
-    },
-    ka: {
-      title: 'GPI — საქართველოს კერძო ინვესტიციები',
-      slug: 'home',
-      hero: {
-        type: 'highImpact',
-        richText: lexicalRoot([
-          lexicalHeading('GPI — საქართველოს კერძო ინვესტიციები'),
-          lexicalParagraph(
-            'უძრავი ქონების სააგენტო საქართველოში: ინვესტიციები, გაქირავება და გარიგებების თანხლება.',
-          ),
-        ]),
-      },
-    },
-    en: {
-      title: 'GPI — Georgia Private Investment',
-      slug: 'home',
-      hero: {
-        type: 'highImpact',
-        richText: lexicalRoot([
-          lexicalHeading('GPI — Georgia Private Investment'),
-          lexicalParagraph(
-            'Real estate agency in Georgia: investment, rentals, and transaction support.',
-          ),
-        ]),
-      },
-    },
+    ru: { title: 'GPI — Georgia Private Investment', slug: 'home' },
+    ka: { title: 'GPI — საქართველოს კერძო ინვესტიციები', slug: 'home' },
+    en: { title: 'GPI — Georgia Private Investment', slug: 'home' },
   },
   blog: {
     ru: {
@@ -328,22 +293,8 @@ export async function seedLocalizedContent(
       const { title, slug, hero } = translations[locale]
       let heroData: Page['hero'] | undefined = hero
 
-      if (page.slug === 'home' && hero?.richText) {
-        heroData = {
-          type: 'highImpact',
-          media: homeHeroMediaId,
-          richText: hero.richText,
-          links: [
-            {
-              link: {
-                type: 'reference' as const,
-                label: headerNavLabels[locale].blog,
-                reference: { relationTo: 'pages' as const, value: pageIds.blog },
-                appearance: 'default' as const,
-              },
-            },
-          ],
-        }
+      if (page.slug === 'home') {
+        heroData = buildHomeSlideshowHero(locale, homeHeroMediaId)
       } else if (page.slug === '404' && hero) {
         heroData = {
           type: 'lowImpact',

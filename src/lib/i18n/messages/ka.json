@@ -10,5 +10,8 @@
   "blogCtaTelegram": "Telegram",
   "readMore": "დეტალურად",
   "notFound": "გვერდი ვერ მოიძებნა",
-  "home": "მთავარი"
+  "home": "მთავარი",
+  "slideshowPrev": "წინა სლაიდი",
+  "slideshowNext": "შემდეგი სლაიდი",
+  "slideshowSlideN": "სლაიდი {n}"
 }
