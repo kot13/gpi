@@ -5,7 +5,7 @@ alwaysApply: true
 <!-- SPECKIT START -->
 Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
 
-**Актуальный план**: [specs/003-slideshow-layout/plan.md](specs/003-slideshow-layout/plan.md)
+**Актуальный план**: [specs/004-property-catalog/plan.md](specs/004-property-catalog/plan.md)
 
 Ключевые принципы (см. `.specify/memory/constitution.md`):
 - Спецификации на русском языке
@@ -17,11 +17,11 @@ alwaysApply: true
 - PageSpeed ≥ 90
 - Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
 
-**Стек фичи 003-slideshow-layout**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Embla Carousel, Vitest, Playwright.
+**Стек фичи 004-property-catalog**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet / react-leaflet, Vitest, Playwright.
 
-**Фокус фичи**: hero type `slideshow` — массив слайдов в CMS (image, title, subtitle, link, buttonLabel); UI: таймлайн, loop, slide transition, fade in up, autoplay 6s, reduced motion.
+**Фокус фичи**: коллекция `properties` (полная модель объекта); публичные маршруты `/{locale}/properties` и `/{locale}/properties/{objectCode}`; фильтры каталога (client island + SSG); карта Leaflet на детальной странице.
 
-**Структура**: `src/heros/config.ts`, `src/heros/Slideshow/`, `src/heros/RenderHero.tsx`, seed `src/endpoints/seed/home.ts`.
+**Структура**: `src/collections/Properties/`, `src/lib/properties/`, `src/app/(frontend)/[locale]/properties/`, `src/components/properties/`, seed `src/endpoints/seed/properties.ts`.
 
-**Команды**: см. [quickstart.md](specs/003-slideshow-layout/quickstart.md)
+**Команды**: см. [quickstart.md](specs/004-property-catalog/quickstart.md)
 <!-- SPECKIT END -->

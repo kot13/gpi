@@ -14,6 +14,14 @@ export function localeBlogCategoryPath(slug: string, locale: Locale): string {
   return `/${locale}/blog/category/${slug}`
 }
 
+export function localePropertyCatalogPath(locale: Locale): string {
+  return `/${locale}/properties`
+}
+
+export function localePropertyDetailPath(objectCode: string, locale: Locale): string {
+  return `/${locale}/properties/${encodeURIComponent(objectCode)}`
+}
+
 export function revalidateAllLocalePagePaths(slug: string): void {
   for (const locale of LOCALES) {
     revalidatePath(localePagePath(slug, locale))
@@ -29,6 +37,14 @@ export function revalidateAllLocaleBlogPostPaths(slug: string): void {
   revalidatePath('/ka/blog')
   revalidatePath('/en/blog')
   revalidateTag('posts-sitemap')
+}
+
+export function revalidateAllLocalePropertyPaths(objectCode: string): void {
+  for (const locale of LOCALES) {
+    revalidatePath(localePropertyCatalogPath(locale))
+    revalidatePath(localePropertyDetailPath(objectCode, locale))
+  }
+  revalidateTag('properties-sitemap')
 }
 
 export function revalidateGlobalLayout(): void {

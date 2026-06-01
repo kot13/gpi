@@ -10,8 +10,10 @@ import { post3 } from './post-3'
 import { seedLocalizedContent } from './localized'
 import { blogPage } from './pages/blog'
 import { notFoundPage } from './pages/not-found'
+import { propertiesPage } from './pages/properties'
+import { seedPropertiesCatalog } from './properties'
 
-const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts']
+const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'properties']
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
@@ -208,6 +210,17 @@ export const seed = async ({
     data: notFoundPage(),
   })
 
+  const propertiesPageDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: propertiesPage(),
+  })
+
+  payload.logger.info(`— Seeding properties catalog...`)
+
+  await seedPropertiesCatalog(payload, req, [image1Doc, image2Doc, image3Doc])
+
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
@@ -216,8 +229,8 @@ export const seed = async ({
       data: {
         navItems: [],
         socialLinks: [
-          { platform: 'telegram', url: 'https://t.me/gpi', order: 1 },
-          { platform: 'whatsapp', url: 'https://wa.me/', order: 2 },
+          { platform: 'telegram', url: 'https://t.me/gpi' },
+          { platform: 'whatsapp', url: 'https://wa.me/' },
         ],
       },
       context: { disableRevalidate: true },

@@ -9,8 +9,8 @@ describe('BlogPostCTA', () => {
       <BlogPostCTA
         locale="ru"
         socialLinks={[
-          { platform: 'whatsapp', url: 'https://wa.me/123', order: 1 },
-          { platform: 'telegram', url: 'https://t.me/gpi', order: 2 },
+          { platform: 'whatsapp', url: 'https://wa.me/123' },
+          { platform: 'telegram', url: 'https://t.me/gpi' },
         ]}
       />,
     )

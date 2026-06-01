@@ -8,6 +8,7 @@ import { BlogCategories } from './collections/BlogCategories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Properties } from './collections/Properties'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -51,7 +52,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, BlogCategories, Users],
+  collections: [Pages, Posts, Properties, Media, BlogCategories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

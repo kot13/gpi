@@ -5,7 +5,6 @@ import type { SocialPlatform } from '@/components/ui/icons/types'
 type SocialLink = {
   platform: SocialPlatform
   url: string
-  order?: number | null
 }
 
 const platformLabels: Record<SocialPlatform, string> = {
@@ -14,16 +13,17 @@ const platformLabels: Record<SocialPlatform, string> = {
   vk: 'VK',
   viber: 'Viber',
   messenger: 'Messenger',
+  youtube: 'YouTube',
+  facebook: 'Facebook',
+  linkedin: 'LinkedIn',
 }
 
 export function SocialLinks({ links }: { links?: SocialLink[] | null }) {
   if (!links?.length) return null
 
-  const sorted = [...links].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-
   return (
     <div className="flex items-center gap-1">
-      {sorted.map((link, i) => {
+      {links.map((link, i) => {
         const Icon = socialIconMap[link.platform]
         return (
           <Link

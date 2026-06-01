@@ -88,6 +88,41 @@ const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
     ka: { title: 'GPI — საქართველოს კერძო ინვესტიციები', slug: 'home' },
     en: { title: 'GPI — Georgia Private Investment', slug: 'home' },
   },
+  properties: {
+    ru: {
+      title: 'Каталог недвижимости',
+      slug: 'properties',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('Каталог недвижимости'),
+          lexicalParagraph('Актуальные предложения GPI в Батуми и Тбилиси'),
+        ]),
+      },
+    },
+    ka: {
+      title: 'უძრავი ქონების კატალოგი',
+      slug: 'properties',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('უძრავი ქონების კატალოგი'),
+          lexicalParagraph('GPI-ის აქტუალური შეთავაზებები ბათუმსა და თბილისში'),
+        ]),
+      },
+    },
+    en: {
+      title: 'Property catalog',
+      slug: 'properties',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('Property catalog'),
+          lexicalParagraph('Current GPI listings in Batumi and Tbilisi'),
+        ]),
+      },
+    },
+  },
   blog: {
     ru: {
       title: 'Блог',
@@ -166,10 +201,10 @@ const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
   },
 }
 
-const headerNavLabels: Record<Locale, { home: string; blog: string }> = {
-  ru: { home: 'Главная', blog: 'Блог' },
-  ka: { home: 'მთავარი', blog: 'ბლოგი' },
-  en: { home: 'Home', blog: 'Blog' },
+const headerNavLabels: Record<Locale, { home: string; blog: string; catalog: string }> = {
+  ru: { home: 'Главная', blog: 'Блог', catalog: 'Каталог' },
+  ka: { home: 'მთავარი', blog: 'ბლოგი', catalog: 'კატალოგი' },
+  en: { home: 'Home', blog: 'Blog', catalog: 'Catalog' },
 }
 
 const notFoundLinkLabels: Record<Locale, string> = {
@@ -178,20 +213,34 @@ const notFoundLinkLabels: Record<Locale, string> = {
   en: 'Back to home',
 }
 
-type NavItemKey = 'home' | 'blog'
+type NavItemKey = 'home' | 'blog' | 'catalog'
 
-const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog']
+const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog', 'catalog']
 
 type NavItemRow = NonNullable<Header['navItems']>[number]
 
-function buildNavItems(locale: Locale, pageIds: SeedPageIds): NavItemRow[] {
-  return NAV_ITEM_ORDER.map((key) => ({
+function buildNavItem(locale: Locale, key: NavItemKey, pageIds: SeedPageIds): NavItemRow {
+  if (key === 'catalog') {
+    return {
+      link: {
+        type: 'custom' as const,
+        label: headerNavLabels[locale].catalog,
+        url: `/${locale}/properties`,
+      },
+    }
+  }
+
+  return {
     link: {
       type: 'reference' as const,
       label: headerNavLabels[locale][key],
       reference: { relationTo: 'pages' as const, value: pageIds[key] },
     },
-  }))
+  }
+}
+
+function buildNavItems(locale: Locale, pageIds: SeedPageIds): NavItemRow[] {
+  return NAV_ITEM_ORDER.map((key) => buildNavItem(locale, key, pageIds))
 }
 
 function buildNavItemsWithIds(
@@ -202,6 +251,18 @@ function buildNavItemsWithIds(
   return existingItems.map((item, index) => {
     const key = NAV_ITEM_ORDER[index]
     if (!key || !item.id) return item
+
+    if (key === 'catalog') {
+      return {
+        id: item.id,
+        link: {
+          type: 'custom' as const,
+          label: headerNavLabels[locale].catalog,
+          url: `/${locale}/properties`,
+          newTab: item.link?.newTab ?? null,
+        },
+      }
+    }
 
     return {
       id: item.id,
@@ -323,7 +384,7 @@ export async function seedLocalizedContent(
       }
 
       // Localized layout blocks must not reuse row ids from the default locale
-      if (page.slug === 'blog' || page.slug === '404') {
+      if (page.slug === 'blog' || page.slug === '404' || page.slug === 'properties') {
         pageData.layout = stripNestedIds(minimalPlaceholderLayout())
       }
 

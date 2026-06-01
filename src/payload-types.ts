@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    properties: Property;
     media: Media;
     categories: Category;
     users: User;
@@ -83,6 +84,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    properties: PropertiesSelect<false> | PropertiesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -575,6 +577,83 @@ export interface ArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties".
+ */
+export interface Property {
+  id: number;
+  /**
+   * Уникальный идентификатор для URL (например, 1037)
+   */
+  objectCode: string;
+  listingStatus: 'draft' | 'active' | 'inactive';
+  title: string;
+  description: string;
+  /**
+   * Дата на сайте (не путать с автоматическим updatedAt документа)
+   */
+  listingDate?: string | null;
+  city: 'Tbilisi' | 'Batumi';
+  district?: string | null;
+  street?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  priceUsd: number;
+  priceGel: number;
+  area: number;
+  rooms: number;
+  floor?: number | null;
+  totalFloors?: number | null;
+  condition?: ('renovated' | 'new' | 'good' | 'premium') | null;
+  repair?: ('renovated' | 'white_frame' | 'black_frame' | 'unknown') | null;
+  layout?: ('studio' | '1+1' | '2+1' | '3+1' | '4plus') | null;
+  heating?: ('gas' | 'electric' | 'unknown') | null;
+  readiness?: ('ready' | 'building' | 'unknown') | null;
+  buildingType?: string | null;
+  features?:
+    | (
+        | 'balcony'
+        | 'elevator'
+        | 'parking'
+        | 'sea_view'
+        | 'mountain_view'
+        | 'city_view'
+        | 'new_building'
+        | 'renovated'
+        | 'furnished'
+        | 'near_metro'
+        | 'terrace'
+        | 'old_town'
+        | 'central_heating'
+        | 'boulevard'
+        | 'pool'
+      )[]
+    | null;
+  /**
+   * Загрузите изображения в медиатеку. Порядок = порядок в галерее.
+   */
+  photos?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  telegramUrl?: string | null;
+  crmUrl?: string | null;
+  driveFolderUrl?: string | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -719,6 +798,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'properties';
+        value: number | Property;
       } | null)
     | ({
         relationTo: 'media';
@@ -946,6 +1029,54 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties_select".
+ */
+export interface PropertiesSelect<T extends boolean = true> {
+  objectCode?: T;
+  listingStatus?: T;
+  title?: T;
+  description?: T;
+  listingDate?: T;
+  city?: T;
+  district?: T;
+  street?: T;
+  lat?: T;
+  lng?: T;
+  priceUsd?: T;
+  priceGel?: T;
+  area?: T;
+  rooms?: T;
+  floor?: T;
+  totalFloors?: T;
+  condition?: T;
+  repair?: T;
+  layout?: T;
+  heating?: T;
+  readiness?: T;
+  buildingType?: T;
+  features?: T;
+  photos?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  telegramUrl?: T;
+  crmUrl?: T;
+  driveFolderUrl?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1202,9 +1333,8 @@ export interface Header {
     | null;
   socialLinks?:
     | {
-        platform: 'whatsapp' | 'telegram' | 'vk' | 'viber' | 'messenger';
+        platform: 'facebook' | 'linkedin' | 'messenger' | 'telegram' | 'viber' | 'vk' | 'whatsapp' | 'youtube';
         url: string;
-        order: number;
         id?: string | null;
       }[]
     | null;
@@ -1268,7 +1398,6 @@ export interface HeaderSelect<T extends boolean = true> {
     | {
         platform?: T;
         url?: T;
-        order?: T;
         id?: T;
       };
   updatedAt?: T;

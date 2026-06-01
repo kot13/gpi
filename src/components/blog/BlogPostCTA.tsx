@@ -10,7 +10,6 @@ import { cn } from '@/utilities/ui'
 type SocialLink = {
   platform: SocialPlatform
   url: string
-  order?: number | null
 }
 
 type Props = {
@@ -23,9 +22,7 @@ const ctaPlatforms: SocialPlatform[] = ['whatsapp', 'telegram']
 
 export function BlogPostCTA({ locale, socialLinks, className }: Props) {
   const t = getMessages(locale)
-  const links = (socialLinks ?? [])
-    .filter((l) => ctaPlatforms.includes(l.platform))
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  const links = (socialLinks ?? []).filter((l) => ctaPlatforms.includes(l.platform))
 
   const labelFor = (platform: SocialPlatform) => {
     if (platform === 'whatsapp') return t.blogCtaWhatsApp
