@@ -6,12 +6,14 @@ import type { Locale } from '@/lib/i18n/config'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { MapBlockComponent } from '@/blocks/MapBlock/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  mapBlock: MapBlockComponent,
   mediaBlock: MediaBlock,
 }
 
@@ -36,7 +38,11 @@ export const RenderBlocks: React.FC<{
               return (
                 <div className="my-16" key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer locale={locale} />
+                  <Block
+                    {...block}
+                    locale={locale}
+                    {...(blockType === 'mediaBlock' ? { disableInnerContainer: true } : {})}
+                  />
                 </div>
               )
             }

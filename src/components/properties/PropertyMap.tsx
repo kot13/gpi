@@ -7,7 +7,7 @@ import type { Locale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/getMessages'
 import { isGeorgiaCoordinates } from '@/hooks/validatePropertyPublish'
 
-const MapInner = dynamic(() => import('./PropertyMapInner'), {
+const MapInner = dynamic(() => import('@/components/maps/MapInner'), {
   ssr: false,
   loading: () => <div className="h-60 md:h-80 rounded-lg bg-gpi-border animate-pulse" />,
 })

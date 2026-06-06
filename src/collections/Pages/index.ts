@@ -5,7 +5,9 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
+import { MapBlock } from '../../blocks/MapBlock/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { validateMapBlockOnPublish } from '../../blocks/MapBlock/hooks/validateMapBlockOnPublish'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -73,7 +75,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive],
+              blocks: [CallToAction, Content, MediaBlock, Archive, MapBlock],
               required: true,
               localized: true,
               admin: {
@@ -123,7 +125,7 @@ export const Pages: CollectionConfig<'pages'> = {
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt, validateLocalizedPublish],
+    beforeChange: [populatePublishedAt, validateLocalizedPublish, validateMapBlockOnPublish],
     afterDelete: [revalidateDelete],
   },
   versions: {

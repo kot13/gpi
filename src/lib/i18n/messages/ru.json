@@ -95,6 +95,10 @@
       "feature.pool": "бассейн"
     }
   },
+  "maps": {
+    "defaultLabel": "Карта",
+    "unavailable": "Карта временно недоступна. Адрес указан выше."
+  },
   "forms": {
     "namePlaceholder": "Ваше имя",
     "phonePlaceholder": "00-000-000",

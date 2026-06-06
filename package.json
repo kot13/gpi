@@ -14,7 +14,7 @@
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation eslint . --fix",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx src/endpoints/seed/index.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/run-seed.ts",
     "db:push": "cross-env NODE_OPTIONS=--no-deprecation PAYLOAD_FORCE_DRIZZLE_PUSH=true NODE_ENV=development tsx scripts/push-schema.ts",
     "test": "npm run test:unit && npm run test:integration && npm run test:e2e",
     "test:unit": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts tests/unit",

@@ -5,7 +5,7 @@ alwaysApply: true
 <!-- SPECKIT START -->
 Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
 
-**Актуальный план**: [specs/005-form-builder/plan.md](specs/005-form-builder/plan.md)
+**Актуальный план**: [specs/006-content-map/plan.md](specs/006-content-map/plan.md)
 
 Ключевые принципы (см. `.specify/memory/constitution.md`):
 - Спецификации на русском языке
@@ -17,11 +17,11 @@ alwaysApply: true
 - PageSpeed ≥ 90
 - Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
 
-**Стек фичи 005-form-builder**: Payload CMS 3, Next.js 15, Tailwind CSS 4, react-hook-form, libphonenumber-js, Vitest, Playwright.
+**Стек фичи 006-content-map**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet 1.9, react-leaflet 5, Vitest, Playwright.
 
-**Фокус фичи**: коллекции `forms` и `form-submissions`; форма консультации в подвале над навигацией; client island с выбором способа связи и phone country picker по макету.
+**Фокус фичи**: блок `mapBlock` в layout страниц Pages; интерактивный `MapPointPicker` в админке; публичная карта с маркером и компоновкой «текст + карта» (страница контактов); переиспользование `MapInner` из каталога объектов.
 
-**Структура**: `src/collections/Forms/`, `src/collections/FormSubmissions/`, `src/lib/forms/`, `src/components/forms/`, `src/Footer/Component.tsx`, seed `src/endpoints/seed/forms.ts`.
+**Структура**: `src/blocks/MapBlock/`, `src/components/maps/`, `src/lib/maps/`, `src/endpoints/seed/pages/contacts.ts`, `src/blocks/RenderBlocks.tsx`.
 
-**Команды**: см. [quickstart.md](specs/005-form-builder/quickstart.md)
+**Команды**: см. [quickstart.md](specs/006-content-map/quickstart.md)
 <!-- SPECKIT END -->

@@ -95,6 +95,10 @@
       "feature.pool": "აუზი"
     }
   },
+  "maps": {
+    "defaultLabel": "რუკა",
+    "unavailable": "რუკა დროებით მიუწვდომელია. მისამართი მითითებულია ზემოთ."
+  },
   "forms": {
     "namePlaceholder": "თქვენი სახელი",
     "phonePlaceholder": "00-000-000",

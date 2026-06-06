@@ -95,6 +95,10 @@
       "feature.pool": "Pool"
     }
   },
+  "maps": {
+    "defaultLabel": "Map",
+    "unavailable": "Map is temporarily unavailable. The address is shown above."
+  },
   "forms": {
     "namePlaceholder": "Your name",
     "phonePlaceholder": "00-000-000",

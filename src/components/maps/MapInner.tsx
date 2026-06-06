@@ -6,11 +6,19 @@ import L from 'leaflet'
 import React, { useEffect } from 'react'
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet'
 
-// Fix default marker icons in bundlers
+import {
+  DEFAULT_ZOOM,
+  LEAFLET_MARKER_ICON,
+  LEAFLET_MARKER_ICON_2X,
+  LEAFLET_MARKER_SHADOW,
+  OSM_ATTRIBUTION,
+  OSM_TILE_URL,
+} from '@/lib/maps/constants'
+
 const icon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl: LEAFLET_MARKER_ICON,
+  iconRetinaUrl: LEAFLET_MARKER_ICON_2X,
+  shadowUrl: LEAFLET_MARKER_SHADOW,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 })
@@ -36,20 +44,18 @@ function ScrollWheelControl() {
 type Props = {
   lat: number
   lng: number
+  zoom?: number
 }
 
-export default function PropertyMapInner({ lat, lng }: Props) {
+export default function MapInner({ lat, lng, zoom = DEFAULT_ZOOM }: Props) {
   return (
     <MapContainer
       center={[lat, lng]}
-      zoom={15}
+      zoom={zoom}
       className="h-full w-full z-0"
       scrollWheelZoom={false}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <TileLayer attribution={OSM_ATTRIBUTION} url={OSM_TILE_URL} />
       <Marker position={[lat, lng]} icon={icon} />
       <ScrollWheelControl />
     </MapContainer>

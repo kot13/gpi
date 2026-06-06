@@ -4,6 +4,7 @@ import type { Header, Page } from '@/payload-types'
 import { LOCALES, type Locale } from '@/lib/i18n/config'
 
 import { lexicalHeading, lexicalParagraph, lexicalRoot } from './lexical'
+import { contactsLayoutForLocale } from './pages/mapBlocks'
 import { minimalPlaceholderLayout } from './pages/minimalLayout'
 import { buildHomeSlideshowHero } from './slideshowSlides'
 import { stripNestedIds } from './stripNestedIds'
@@ -17,6 +18,7 @@ type PageLocaleData = {
 type SeedPageIds = {
   home: number
   blog: number
+  contacts: number
 }
 
 type SeedLocalizedOptions = {
@@ -164,6 +166,41 @@ const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
       },
     },
   },
+  contacts: {
+    ru: {
+      title: 'Контакты',
+      slug: 'contacts',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('Мы работаем с объектами недвижимости по всей Грузии'),
+          lexicalParagraph('Офисы GPI в Батуми и Тбилиси.'),
+        ]),
+      },
+    },
+    ka: {
+      title: 'კონტაქტები',
+      slug: 'contacts',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('ჩვენ ვმუშაობთ უძრავი ქონების ობიექტებზე მთელ საქართველოში'),
+          lexicalParagraph('GPI-ის ოფისები ბათუმსა და თბილისში.'),
+        ]),
+      },
+    },
+    en: {
+      title: 'Contacts',
+      slug: 'contacts',
+      hero: {
+        type: 'lowImpact',
+        richText: lexicalRoot([
+          lexicalHeading('We work with real estate properties throughout Georgia'),
+          lexicalParagraph('GPI offices in Batumi and Tbilisi.'),
+        ]),
+      },
+    },
+  },
   '404': {
     ru: {
       title: 'Страница не найдена',
@@ -201,10 +238,13 @@ const pageTranslations: Record<string, Record<Locale, PageLocaleData>> = {
   },
 }
 
-const headerNavLabels: Record<Locale, { home: string; blog: string; catalog: string }> = {
-  ru: { home: 'Главная', blog: 'Блог', catalog: 'Каталог' },
-  ka: { home: 'მთავარი', blog: 'ბლოგი', catalog: 'კატალოგი' },
-  en: { home: 'Home', blog: 'Blog', catalog: 'Catalog' },
+const headerNavLabels: Record<
+  Locale,
+  { home: string; blog: string; catalog: string; contacts: string }
+> = {
+  ru: { home: 'Главная', blog: 'Блог', catalog: 'Каталог', contacts: 'Контакты' },
+  ka: { home: 'მთავარი', blog: 'ბლოგი', catalog: 'კატალოგი', contacts: 'კონტაქტები' },
+  en: { home: 'Home', blog: 'Blog', catalog: 'Catalog', contacts: 'Contacts' },
 }
 
 const notFoundLinkLabels: Record<Locale, string> = {
@@ -213,9 +253,9 @@ const notFoundLinkLabels: Record<Locale, string> = {
   en: 'Back to home',
 }
 
-type NavItemKey = 'home' | 'blog' | 'catalog'
+type NavItemKey = 'home' | 'blog' | 'catalog' | 'contacts'
 
-const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog', 'catalog']
+const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog', 'catalog', 'contacts']
 
 type NavItemRow = NonNullable<Header['navItems']>[number]
 
@@ -386,6 +426,10 @@ export async function seedLocalizedContent(
       // Localized layout blocks must not reuse row ids from the default locale
       if (page.slug === 'blog' || page.slug === '404' || page.slug === 'properties') {
         pageData.layout = stripNestedIds(minimalPlaceholderLayout())
+      }
+
+      if (page.slug === 'contacts') {
+        pageData.layout = stripNestedIds(contactsLayoutForLocale(locale))
       }
 
       await payload.update({

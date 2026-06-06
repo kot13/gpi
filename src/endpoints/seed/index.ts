@@ -10,6 +10,7 @@ import { post3 } from './post-3'
 import { seedLocalizedContent } from './localized'
 import { blogPage } from './pages/blog'
 import { notFoundPage } from './pages/not-found'
+import { contactsPage } from './pages/contacts'
 import { privacyPolicyPage } from './pages/privacy-policy'
 import { propertiesPage } from './pages/properties'
 import { seedConsultationForm } from './forms'
@@ -153,6 +154,7 @@ export const seed = async ({
   const post1Doc = await payload.create({
     collection: 'posts',
     depth: 0,
+    req,
     context: {
       disableRevalidate: true,
     },
@@ -162,6 +164,7 @@ export const seed = async ({
   const post2Doc = await payload.create({
     collection: 'posts',
     depth: 0,
+    req,
     context: {
       disableRevalidate: true,
     },
@@ -171,6 +174,7 @@ export const seed = async ({
   const post3Doc = await payload.create({
     collection: 'posts',
     depth: 0,
+    req,
     context: {
       disableRevalidate: true,
     },
@@ -181,6 +185,8 @@ export const seed = async ({
   await payload.update({
     id: post1Doc.id,
     collection: 'posts',
+    req,
+    context: { disableRevalidate: true },
     data: {
       relatedPosts: [post2Doc.id, post3Doc.id],
     },
@@ -188,6 +194,8 @@ export const seed = async ({
   await payload.update({
     id: post2Doc.id,
     collection: 'posts',
+    req,
+    context: { disableRevalidate: true },
     data: {
       relatedPosts: [post1Doc.id, post3Doc.id],
     },
@@ -195,6 +203,8 @@ export const seed = async ({
   await payload.update({
     id: post3Doc.id,
     collection: 'posts',
+    req,
+    context: { disableRevalidate: true },
     data: {
       relatedPosts: [post1Doc.id, post2Doc.id],
     },
@@ -237,6 +247,13 @@ export const seed = async ({
     data: privacyPolicyPage(),
   })
 
+  const contactsPageDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: contactsPage(),
+  })
+
   payload.logger.info(`— Seeding properties catalog...`)
 
   await seedPropertiesCatalog(payload, req, [image1Doc, image2Doc, image3Doc])
@@ -276,6 +293,7 @@ export const seed = async ({
     pageIds: {
       home: Number(homeDoc.id),
       blog: Number(blogDoc.id),
+      contacts: Number(contactsPageDoc.id),
     },
     homeHeroMediaId: Number(imageHomeDoc.id),
   })

@@ -236,6 +236,9 @@ export const Posts: CollectionConfig<'posts'> = {
         if (data?._status === 'published' && !data?.heroImage) {
           throw new Error('Featured image (heroImage) is required to publish a blog post')
         }
+        if (data && 'populatedAuthors' in data) {
+          delete data.populatedAuthors
+        }
         return data
       },
       validateLocalizedPublish,

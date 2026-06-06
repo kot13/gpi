@@ -221,7 +221,7 @@ export interface Page {
         }[]
       | null;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | MapBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -578,6 +578,53 @@ export interface ArchiveBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapBlock".
+ */
+export interface MapBlock {
+  layoutVariant: 'mapOnly' | 'textAndMap';
+  location?: {
+    /**
+     * От -90 до 90. Можно указать на карте ниже.
+     */
+    lat?: number | null;
+    /**
+     * От -180 до 180. Можно указать на карте ниже.
+     */
+    lng?: number | null;
+    /**
+     * Начальный zoom (1–18). По умолчанию 15.
+     */
+    zoom?: number | null;
+  };
+  /**
+   * Например, название города. Отображается как h2.
+   */
+  title?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  /**
+   * Для скринридеров. Если пусто — используется заголовок или адрес.
+   */
+  markerLabel?: string | null;
+  /**
+   * Иконки телефона, WhatsApp, Telegram под текстом.
+   */
+  quickContacts?:
+    | {
+        platform: 'phone' | 'whatsapp' | 'telegram';
+        /**
+         * tel:+995..., https://wa.me/..., https://t.me/...
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mapBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -970,6 +1017,7 @@ export interface PagesSelect<T extends boolean = true> {
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
+        mapBlock?: T | MapBlockSelect<T>;
       };
   meta?:
     | T
@@ -1055,6 +1103,33 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   categories?: T;
   limit?: T;
   selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapBlock_select".
+ */
+export interface MapBlockSelect<T extends boolean = true> {
+  layoutVariant?: T;
+  location?:
+    | T
+    | {
+        lat?: T;
+        lng?: T;
+        zoom?: T;
+      };
+  title?: T;
+  address?: T;
+  phone?: T;
+  markerLabel?: T;
+  quickContacts?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
