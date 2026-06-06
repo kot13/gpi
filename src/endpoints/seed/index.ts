@@ -10,10 +10,21 @@ import { post3 } from './post-3'
 import { seedLocalizedContent } from './localized'
 import { blogPage } from './pages/blog'
 import { notFoundPage } from './pages/not-found'
+import { privacyPolicyPage } from './pages/privacy-policy'
 import { propertiesPage } from './pages/properties'
+import { seedConsultationForm } from './forms'
 import { seedPropertiesCatalog } from './properties'
 
-const collections: CollectionSlug[] = ['categories', 'media', 'pages', 'posts', 'properties']
+/** FK-safe order: children before parents */
+const collections: CollectionSlug[] = [
+  'form-submissions',
+  'forms',
+  'posts',
+  'properties',
+  'pages',
+  'categories',
+  'media',
+]
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
@@ -54,15 +65,17 @@ export const seed = async ({
     ),
   )
 
-  await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
+  const versionedCollections = collections.filter((collection) =>
+    Boolean(payload.collections[collection]?.config.versions),
   )
 
-  await Promise.all(
-    collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
-  )
+  for (const collection of versionedCollections) {
+    await payload.db.deleteVersions({ collection, req, where: {} })
+  }
+
+  for (const collection of collections) {
+    await payload.db.deleteMany({ collection, req, where: {} })
+  }
 
   payload.logger.info(`— Seeding demo author and user...`)
 
@@ -122,7 +135,7 @@ export const seed = async ({
       data: imageHero1,
       file: hero1Buffer,
     }),
-    categories.map((category) =>
+    ...categories.map((category) =>
       payload.create({
         collection: 'categories',
         data: {
@@ -217,9 +230,20 @@ export const seed = async ({
     data: propertiesPage(),
   })
 
+  const privacyPageDoc = await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: privacyPolicyPage(),
+  })
+
   payload.logger.info(`— Seeding properties catalog...`)
 
   await seedPropertiesCatalog(payload, req, [image1Doc, image2Doc, image3Doc])
+
+  payload.logger.info(`— Seeding consultation form...`)
+
+  await seedConsultationForm(payload, req, Number(privacyPageDoc.id))
 
   payload.logger.info(`— Seeding globals...`)
 

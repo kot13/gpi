@@ -94,5 +94,31 @@
       "feature.boulevard": "ბულვარი",
       "feature.pool": "აუზი"
     }
+  },
+  "forms": {
+    "namePlaceholder": "თქვენი სახელი",
+    "phonePlaceholder": "00-000-000",
+    "telegramPlaceholder": "@username",
+    "vkPlaceholder": "id ან vk.com ბმული",
+    "messengerPlaceholder": "Messenger ბმული ან id",
+    "textPlaceholder": "თქვენი კონტაქტი",
+    "methodPhone": "ტელეფონი",
+    "methodTelegram": "Telegram",
+    "methodWhatsApp": "WhatsApp",
+    "methodVk": "VK",
+    "methodViber": "Viber",
+    "methodMessenger": "Messenger",
+    "selectCountry": "ქვეყნის არჩევა",
+    "errorNameRequired": "მიუთითეთ სახელი",
+    "errorNameTooLong": "სახელი ძალიან გრძელია",
+    "errorContactRequired": "მიუთითეთ კონტაქტი",
+    "errorContactTooLong": "კონტაქტი ძალიან გრძელია",
+    "errorContactInvalid": "არასწორი კონტაქტი",
+    "errorPhoneInvalid": "არასწორი ტელეფონის ნომერი",
+    "errorTelegramInvalid": "არასწორი Telegram",
+    "errorVkInvalid": "არასწორი VK",
+    "errorMessengerInvalid": "არასწორი Messenger",
+    "errorSubmitFailed": "გაგზავნა ვერ მოხერხდა. სცადეთ ხელახლა.",
+    "submitting": "იგზავნება…"
   }
 }

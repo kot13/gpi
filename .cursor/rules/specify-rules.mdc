@@ -5,7 +5,7 @@ alwaysApply: true
 <!-- SPECKIT START -->
 Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
 
-**Актуальный план**: [specs/004-property-catalog/plan.md](specs/004-property-catalog/plan.md)
+**Актуальный план**: [specs/005-form-builder/plan.md](specs/005-form-builder/plan.md)
 
 Ключевые принципы (см. `.specify/memory/constitution.md`):
 - Спецификации на русском языке
@@ -17,11 +17,11 @@ alwaysApply: true
 - PageSpeed ≥ 90
 - Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
 
-**Стек фичи 004-property-catalog**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet / react-leaflet, Vitest, Playwright.
+**Стек фичи 005-form-builder**: Payload CMS 3, Next.js 15, Tailwind CSS 4, react-hook-form, libphonenumber-js, Vitest, Playwright.
 
-**Фокус фичи**: коллекция `properties` (полная модель объекта); публичные маршруты `/{locale}/properties` и `/{locale}/properties/{objectCode}`; фильтры каталога (client island + SSG); карта Leaflet на детальной странице.
+**Фокус фичи**: коллекции `forms` и `form-submissions`; форма консультации в подвале над навигацией; client island с выбором способа связи и phone country picker по макету.
 
-**Структура**: `src/collections/Properties/`, `src/lib/properties/`, `src/app/(frontend)/[locale]/properties/`, `src/components/properties/`, seed `src/endpoints/seed/properties.ts`.
+**Структура**: `src/collections/Forms/`, `src/collections/FormSubmissions/`, `src/lib/forms/`, `src/components/forms/`, `src/Footer/Component.tsx`, seed `src/endpoints/seed/forms.ts`.
 
-**Команды**: см. [quickstart.md](specs/004-property-catalog/quickstart.md)
+**Команды**: см. [quickstart.md](specs/005-form-builder/quickstart.md)
 <!-- SPECKIT END -->

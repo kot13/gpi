@@ -94,5 +94,31 @@
       "feature.boulevard": "Boulevard",
       "feature.pool": "Pool"
     }
+  },
+  "forms": {
+    "namePlaceholder": "Your name",
+    "phonePlaceholder": "00-000-000",
+    "telegramPlaceholder": "@username",
+    "vkPlaceholder": "ID or vk.com link",
+    "messengerPlaceholder": "Messenger link or ID",
+    "textPlaceholder": "Your contact",
+    "methodPhone": "Phone",
+    "methodTelegram": "Telegram",
+    "methodWhatsApp": "WhatsApp",
+    "methodVk": "VK",
+    "methodViber": "Viber",
+    "methodMessenger": "Messenger",
+    "selectCountry": "Select country",
+    "errorNameRequired": "Please enter your name",
+    "errorNameTooLong": "Name is too long",
+    "errorContactRequired": "Please enter your contact",
+    "errorContactTooLong": "Contact is too long",
+    "errorContactInvalid": "Invalid contact",
+    "errorPhoneInvalid": "Invalid phone number",
+    "errorTelegramInvalid": "Invalid Telegram",
+    "errorVkInvalid": "Invalid VK",
+    "errorMessengerInvalid": "Invalid Messenger",
+    "errorSubmitFailed": "Could not submit. Please try again.",
+    "submitting": "Sending…"
   }
 }

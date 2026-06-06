@@ -70,6 +70,8 @@ export interface Config {
     pages: Page;
     posts: Post;
     properties: Property;
+    forms: Form;
+    'form-submissions': FormSubmission;
     media: Media;
     categories: Category;
     users: User;
@@ -85,6 +87,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -654,6 +658,51 @@ export interface Property {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms".
+ */
+export interface Form {
+  id: number;
+  title: string;
+  submitButtonLabel: string;
+  successMessage: string;
+  privacyLinkLabel?: string | null;
+  /**
+   * Шаблон полей на публичном сайте
+   */
+  formType: 'consultation';
+  placement: 'footer' | 'none';
+  privacyPage?: (number | null) | Page;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: number;
+  form: number | Form;
+  name: string;
+  contactMethod: 'phone' | 'telegram' | 'whatsapp' | 'vk' | 'viber' | 'messenger';
+  countryCode?: string | null;
+  dialCode?: string | null;
+  contactValue: string;
+  contactDisplay?: string | null;
+  locale: 'ru' | 'ka' | 'en';
+  status: 'new' | 'processed';
+  submittedAt: string;
+  honeypot?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -802,6 +851,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'properties';
         value: number | Property;
+      } | null)
+    | ({
+        relationTo: 'forms';
+        value: number | Form;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'media';
@@ -1080,6 +1137,43 @@ export interface PropertiesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms_select".
+ */
+export interface FormsSelect<T extends boolean = true> {
+  title?: T;
+  submitButtonLabel?: T;
+  successMessage?: T;
+  privacyLinkLabel?: T;
+  formType?: T;
+  placement?: T;
+  privacyPage?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions_select".
+ */
+export interface FormSubmissionsSelect<T extends boolean = true> {
+  form?: T;
+  name?: T;
+  contactMethod?: T;
+  countryCode?: T;
+  dialCode?: T;
+  contactValue?: T;
+  contactDisplay?: T;
+  locale?: T;
+  status?: T;
+  submittedAt?: T;
+  honeypot?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

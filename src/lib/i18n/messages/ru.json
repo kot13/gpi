@@ -94,5 +94,31 @@
       "feature.boulevard": "бульвар",
       "feature.pool": "бассейн"
     }
+  },
+  "forms": {
+    "namePlaceholder": "Ваше имя",
+    "phonePlaceholder": "00-000-000",
+    "telegramPlaceholder": "@username",
+    "vkPlaceholder": "id или ссылка vk.com",
+    "messengerPlaceholder": "Ссылка или id Messenger",
+    "textPlaceholder": "Ваш контакт",
+    "methodPhone": "Телефон",
+    "methodTelegram": "Telegram",
+    "methodWhatsApp": "WhatsApp",
+    "methodVk": "VK",
+    "methodViber": "Viber",
+    "methodMessenger": "Messenger",
+    "selectCountry": "Выбор страны",
+    "errorNameRequired": "Укажите имя",
+    "errorNameTooLong": "Имя слишком длинное",
+    "errorContactRequired": "Укажите контакт",
+    "errorContactTooLong": "Контакт слишком длинный",
+    "errorContactInvalid": "Некорректный контакт",
+    "errorPhoneInvalid": "Некорректный номер телефона",
+    "errorTelegramInvalid": "Некорректный Telegram",
+    "errorVkInvalid": "Некорректный VK",
+    "errorMessengerInvalid": "Некорректный Messenger",
+    "errorSubmitFailed": "Не удалось отправить заявку. Попробуйте ещё раз.",
+    "submitting": "Отправка…"
   }
 }

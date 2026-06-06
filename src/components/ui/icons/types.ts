@@ -1,4 +1,5 @@
 export type SocialPlatform =
+  | 'phone'
   | 'whatsapp'
   | 'telegram'
   | 'vk'

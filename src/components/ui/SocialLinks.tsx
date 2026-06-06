@@ -8,6 +8,7 @@ type SocialLink = {
 }
 
 const platformLabels: Record<SocialPlatform, string> = {
+  phone: 'Phone',
   whatsapp: 'WhatsApp',
   telegram: 'Telegram',
   vk: 'VK',
