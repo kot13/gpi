@@ -175,6 +175,29 @@ npm run build && npm run start
 
 ---
 
+## Деплой на стейджинг
+
+Автоматический CI/CD из GitHub на VPS (Ubuntu 22, без Docker):
+
+| Workflow | Триггер |
+|----------|---------|
+| [ci.yml](.github/workflows/ci.yml) | push, PR → `main` |
+| [deploy-staging.yml](.github/workflows/deploy-staging.yml) | push → `main`, ручной запуск |
+
+**Secrets checklist** (GitHub → Settings → Secrets):
+
+- `STAGING_SSH_HOST`, `STAGING_SSH_USER`, `STAGING_SSH_PRIVATE_KEY`
+- `STAGING_APP_PATH` (напр. `/var/www/gpi`)
+- `CI_PAYLOAD_SECRET` (≥32 символов, только для CI build)
+
+**Variable**: `STAGING_PUBLIC_URL` — URL стейджинга для smoke-check.
+
+На VPS: `.env` из [`.env.staging.example`](.env.staging.example) (не коммитить). PM2: `ecosystem.config.cjs`.
+
+Полный runbook: [docs/deploy-staging.md](docs/deploy-staging.md) · Quickstart: [specs/008-staging-cicd/quickstart.md](specs/008-staging-cicd/quickstart.md)
+
+---
+
 ## Публикация на CDN
 
 Проект использует **SSG/ISR** (статическая генерация + инвалидация при публикации в CMS). Это **не** чистый статический экспорт в HTML-файлы: нужен Node.js-сервер для admin, API Payload и on-demand revalidation.

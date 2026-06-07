@@ -1,11 +1,7 @@
----
-alwaysApply: true
----
-
 <!-- SPECKIT START -->
 Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
 
-**Актуальный план**: [specs/007-properties-map/plan.md](specs/007-properties-map/plan.md)
+**Актуальный план**: [specs/008-staging-cicd/plan.md](specs/008-staging-cicd/plan.md)
 
 Ключевые принципы (см. `.specify/memory/constitution.md`):
 - Спецификации на русском языке
@@ -17,11 +13,11 @@ alwaysApply: true
 - PageSpeed ≥ 90
 - Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
 
-**Стек фичи 007-properties-map**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet 1.9, react-leaflet 5, leaflet.markercluster, Vitest, Playwright.
+**Стек фичи 008-staging-cicd**: GitHub Actions, OpenSSH, PM2, Node.js 20, PostgreSQL 16, Ubuntu 22.04 VPS (без Docker).
 
-**Фокус фичи**: полноэкранная страница `/{locale}/properties/map`; overlay-панель со списком объектов в viewport; общие фильтры с каталогом; кнопка «Посмотреть на карте»; кластеризация меток; без подвала на странице карты.
+**Фокус фичи**: CI (lint, unit, integration, build) на GitHub; CD на стейджинг-VPS по SSH при push в `main` + `workflow_dispatch`; deploy script, PM2 reload, smoke-check.
 
-**Структура**: `src/app/(frontend)/[locale]/properties/map/`, `src/components/maps/PropertiesMap*.tsx`, `src/lib/maps/bounds.ts`, расширение `PropertyFilters`, `src/Footer/Component.tsx`.
+**Структура**: `.github/workflows/ci.yml`, `.github/workflows/deploy-staging.yml`, `scripts/deploy/staging-remote.sh`, `ecosystem.config.cjs`, `.env.staging.example`.
 
-**Команды**: см. [quickstart.md](specs/007-properties-map/quickstart.md)
+**Команды**: см. [quickstart.md](specs/008-staging-cicd/quickstart.md)
 <!-- SPECKIT END -->

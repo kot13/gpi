@@ -3,6 +3,9 @@ dist / media
 node_modules
 .DS_Store
 .env
+.env.*
+!.env.example
+!.env.staging.example
 .next
 next-env.d.ts
 .vercel

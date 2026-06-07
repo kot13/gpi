@@ -1,0 +1,82 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to deploy (branch, tag, or SHA)'
+        required: false
+        default: main
+
+concurrency:
+  group: staging-deploy
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy-staging:
+    name: deploy-staging
+    needs: ci
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    environment:
+      name: staging
+      url: ${{ vars.STAGING_PUBLIC_URL }}
+    steps:
+      - name: Checkout deploy ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
+          fetch-depth: 0
+
+      - name: Resolve commit SHA
+        id: sha
+        run: echo "value=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+
+      - name: Add SSH known hosts
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          STAGING_PORT: ${{ secrets.STAGING_SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          PORT="${STAGING_PORT:-22}"
+          ssh-keyscan -p "$PORT" -H "$STAGING_HOST" >> ~/.ssh/known_hosts
+
+      - name: Run remote deploy script
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_SSH_USER }}
+          STAGING_PORT: ${{ secrets.STAGING_SSH_PORT }}
+          APP_PATH: ${{ secrets.STAGING_APP_PATH }}
+          COMMIT_SHA: ${{ steps.sha.outputs.value }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          PORT="${STAGING_PORT:-22}"
+          ssh -p "$PORT" "${STAGING_USER}@${STAGING_HOST}" \
+            "cd '${APP_PATH}' && bash scripts/deploy/staging-remote.sh --commit '${COMMIT_SHA}' --run-id '${RUN_ID}'"
+
+  smoke-check:
+    name: smoke-check
+    needs: deploy-staging
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify staging endpoints
+        env:
+          STAGING_URL: ${{ vars.STAGING_PUBLIC_URL }}
+        run: |
+          RU_CODE=$(curl -fsS -o /dev/null -w "%{http_code}" "${STAGING_URL}/ru")
+          ADMIN_CODE=$(curl -fsS -o /dev/null -w "%{http_code}" "${STAGING_URL}/admin")
+          echo "/ru -> ${RU_CODE}"
+          echo "/admin -> ${ADMIN_CODE}"
+          test "$RU_CODE" = "200"
+          test "$ADMIN_CODE" = "200" -o "$ADMIN_CODE" = "302"
