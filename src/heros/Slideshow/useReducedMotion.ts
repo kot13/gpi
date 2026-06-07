@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import { REDUCED_MOTION_QUERY, readReducedMotionPreference } from '@/lib/motion/reducedMotion'
+import { REDUCED_MOTION_QUERY } from '@/lib/motion/reducedMotion'
 
 export { readReducedMotionPreference } from '@/lib/motion/reducedMotion'
 

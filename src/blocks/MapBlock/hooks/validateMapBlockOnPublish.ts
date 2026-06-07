@@ -16,7 +16,7 @@ function findMatchingMapBlock(blocks: unknown[], block: MapBlock, index: number)
 
   if (block.id) {
     const byId = blocks.find((item) => isMapBlock(item) && item.id === block.id)
-    if (byId) return byId
+    if (byId && isMapBlock(byId)) return byId
   }
 
   const byIndex = blocks[index]

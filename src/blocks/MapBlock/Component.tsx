@@ -32,7 +32,7 @@ export const MapBlockComponent: React.FC<Props> = (props) => {
   const lat = location?.lat
   const lng = location?.lng
   const zoom = location?.zoom ?? DEFAULT_ZOOM
-  const coordsValid = hasValidCoordinatePair(lat, lng)
+  const coordsValid = lat != null && lng != null && hasValidCoordinatePair(lat, lng)
 
   const ariaLabel =
     markerLabel?.trim() ||

@@ -48,7 +48,7 @@ export const MapPointPicker: React.FC<Props> = ({ path }) => {
   )
 
   const center = useMemo(() => {
-    if (hasValidCoordinatePair(lat, lng)) {
+    if (lat != null && lng != null && hasValidCoordinatePair(lat, lng)) {
       return { lat, lng }
     }
     return DEFAULT_CENTER_GE

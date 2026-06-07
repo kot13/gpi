@@ -234,7 +234,7 @@ export const seed = async ({
     data: notFoundPage(),
   })
 
-  const propertiesPageDoc = await payload.create({
+  await payload.create({
     collection: 'pages',
     depth: 0,
     context: { disableRevalidate: true },

@@ -32,12 +32,13 @@ export const RenderBlocks: React.FC<{
           const { blockType } = block
 
           if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
+            const Block = blockComponents[blockType] as unknown as React.FC<
+              Record<string, unknown> & { locale?: Locale; disableInnerContainer?: boolean }
+            >
 
             if (Block) {
               return (
                 <div className="my-16" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block
                     {...block}
                     locale={locale}

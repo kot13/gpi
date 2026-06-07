@@ -31,7 +31,7 @@ const PHOTOS_PER_PROPERTY = 6
 export function mapPropertyPhotosFromFallback(
   photoUrls: string[],
   fallback: Media[],
-): Array<{ image: number | string }> {
+): Array<{ image: number }> {
   if (!fallback.length) return []
 
   const count = Math.min(photoUrls.length || PHOTOS_PER_PROPERTY, PHOTOS_PER_PROPERTY)

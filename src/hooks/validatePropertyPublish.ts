@@ -88,7 +88,6 @@ export const validatePropertyPublish: CollectionBeforeChangeHook = async ({
   req,
   operation,
   originalDoc,
-  context,
 }) => {
   const doc = data as PropertyPublishFields
   const locale = req.locale || 'ru'
