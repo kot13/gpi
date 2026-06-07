@@ -18,6 +18,10 @@ export function localePropertyCatalogPath(locale: Locale): string {
   return `/${locale}/properties`
 }
 
+export function localePropertyMapPath(locale: Locale): string {
+  return `/${locale}/properties/map`
+}
+
 export function localePropertyDetailPath(objectCode: string, locale: Locale): string {
   return `/${locale}/properties/${encodeURIComponent(objectCode)}`
 }
@@ -42,6 +46,7 @@ export function revalidateAllLocaleBlogPostPaths(slug: string): void {
 export function revalidateAllLocalePropertyPaths(objectCode: string): void {
   for (const locale of LOCALES) {
     revalidatePath(localePropertyCatalogPath(locale))
+    revalidatePath(localePropertyMapPath(locale))
     revalidatePath(localePropertyDetailPath(objectCode, locale))
   }
   revalidateTag('properties-sitemap')

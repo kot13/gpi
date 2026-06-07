@@ -15,6 +15,7 @@ import { privacyPolicyPage } from './pages/privacy-policy'
 import { propertiesPage } from './pages/properties'
 import { seedConsultationForm } from './forms'
 import { seedPropertiesCatalog } from './properties'
+import { seedPropertiesMapDensity } from './properties-map-density'
 
 /** FK-safe order: children before parents */
 const collections: CollectionSlug[] = [
@@ -297,6 +298,10 @@ export const seed = async ({
     },
     homeHeroMediaId: Number(imageHomeDoc.id),
   })
+
+  if (process.env.SEED_MAP_DENSITY === '1') {
+    await seedPropertiesMapDensity(payload)
+  }
 
   payload.logger.info('Seeded database successfully!')
 }

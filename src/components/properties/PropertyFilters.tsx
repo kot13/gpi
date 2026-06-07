@@ -39,6 +39,10 @@ type Props = {
   locale: Locale
   districts: string[]
   className?: string
+  basePath?: string
+  presentation?: 'sidebar' | 'sheet'
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 type FilterFormState = {
@@ -199,12 +203,22 @@ function FilterMultiSelectDropdown<T extends string>({
   )
 }
 
-export function PropertyFilters({ locale, districts, className }: Props) {
+export function PropertyFilters({
+  locale,
+  districts,
+  className,
+  basePath,
+  presentation = 'sidebar',
+  open = false,
+  onOpenChange,
+}: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
   const t = getMessages(locale)
   const p = t.properties
+
+  const pathBase = basePath ?? `/${locale}/properties`
 
   const current = useMemo(() => parseFormState(searchParams), [searchParams])
 
@@ -228,10 +242,10 @@ export function PropertyFilters({ locale, districts, className }: Props) {
         sort: next.sort,
       })
       startTransition(() => {
-        router.replace(`/${locale}/properties${query ? `?${query}` : ''}`, { scroll: false })
+        router.replace(`${pathBase}${query ? `?${query}` : ''}`, { scroll: false })
       })
     },
-    [current, locale, router],
+    [current, pathBase, router],
   )
 
   const toggleInList = useCallback(
@@ -246,40 +260,8 @@ export function PropertyFilters({ locale, districts, className }: Props) {
   const panelId = 'property-filters-panel'
   const filterPlaceholder = p?.filterAll ?? '—'
 
-  return (
-    <aside className={cn(className)} aria-label={p?.filtersTitle} aria-busy={isPending}>
-      <button
-        type="button"
-        className="lg:hidden flex w-full min-h-11 items-center justify-between gap-3 rounded-md border border-gpi-border bg-gpi-bg px-3 text-left"
-        aria-expanded={mobileOpen}
-        aria-controls={panelId}
-        onClick={() => setMobileOpen((open) => !open)}
-      >
-        <span className="flex min-w-0 items-center gap-2">
-          <span className="text-lg font-semibold font-gpi-heading text-gpi-text truncate">
-            {p?.filtersTitle}
-          </span>
-          {activeCount > 0 && (
-            <span className="shrink-0 rounded-full bg-gpi-brand px-2 py-0.5 text-xs font-medium text-white">
-              {activeCount}
-            </span>
-          )}
-        </span>
-        <ChevronDown
-          aria-hidden
-          className={cn('h-5 w-5 shrink-0 text-gpi-muted transition-transform', mobileOpen && 'rotate-180')}
-        />
-        <span className="sr-only">{mobileOpen ? p?.filtersHide : p?.filtersShow}</span>
-      </button>
-
-      <h2 className="hidden lg:block text-lg font-semibold font-gpi-heading text-gpi-text mb-4">
-        {p?.filtersTitle}
-      </h2>
-
-      <div
-        id={panelId}
-        className={cn('space-y-4', mobileOpen ? 'block' : 'hidden', 'lg:block')}
-      >
+  const filterFields = (
+    <div id={panelId} className="space-y-4">
         <FilterMultiSelectDropdown
           legend={p?.filterCity ?? 'City'}
           options={PROPERTY_CITIES}
@@ -404,12 +386,78 @@ export function PropertyFilters({ locale, districts, className }: Props) {
           type="button"
           className="w-full min-h-11 rounded-md border border-gpi-border text-gpi-text font-medium"
           onClick={() =>
-            startTransition(() => router.replace(`/${locale}/properties`, { scroll: false }))
+            startTransition(() => router.replace(pathBase, { scroll: false }))
           }
         >
           {p?.filterReset}
         </button>
+    </div>
+  )
+
+  if (presentation === 'sheet') {
+    if (!open) return null
+
+    return (
+      <div className="fixed inset-0 z-[2000] flex justify-end" aria-busy={isPending}>
+        <button
+          type="button"
+          className="absolute inset-0 bg-black/40"
+          aria-label={p?.filtersHide}
+          onClick={() => onOpenChange?.(false)}
+        />
+        <aside
+          className="relative h-full w-full max-w-md overflow-y-auto bg-gpi-bg p-4 shadow-xl"
+          aria-label={p?.filtersTitle}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold font-gpi-heading text-gpi-text">
+              {p?.filtersTitle}
+            </h2>
+            <button
+              type="button"
+              className="min-h-11 min-w-11 rounded-md border border-gpi-border"
+              onClick={() => onOpenChange?.(false)}
+            >
+              ×
+            </button>
+          </div>
+          {filterFields}
+        </aside>
       </div>
+    )
+  }
+
+  return (
+    <aside className={cn(className)} aria-label={p?.filtersTitle} aria-busy={isPending}>
+      <button
+        type="button"
+        className="lg:hidden flex w-full min-h-11 items-center justify-between gap-3 rounded-md border border-gpi-border bg-gpi-bg px-3 text-left"
+        aria-expanded={mobileOpen}
+        aria-controls={panelId}
+        onClick={() => setMobileOpen((isOpen) => !isOpen)}
+      >
+        <span className="flex min-w-0 items-center gap-2">
+          <span className="text-lg font-semibold font-gpi-heading text-gpi-text truncate">
+            {p?.filtersTitle}
+          </span>
+          {activeCount > 0 && (
+            <span className="shrink-0 rounded-full bg-gpi-brand px-2 py-0.5 text-xs font-medium text-white">
+              {activeCount}
+            </span>
+          )}
+        </span>
+        <ChevronDown
+          aria-hidden
+          className={cn('h-5 w-5 shrink-0 text-gpi-muted transition-transform', mobileOpen && 'rotate-180')}
+        />
+        <span className="sr-only">{mobileOpen ? p?.filtersHide : p?.filtersShow}</span>
+      </button>
+
+      <h2 className="hidden lg:block text-lg font-semibold font-gpi-heading text-gpi-text mb-4">
+        {p?.filtersTitle}
+      </h2>
+
+      <div className={cn(mobileOpen ? 'block' : 'hidden', 'lg:block')}>{filterFields}</div>
     </aside>
   )
 }

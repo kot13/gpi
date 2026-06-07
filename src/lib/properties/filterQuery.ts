@@ -9,7 +9,10 @@ export function buildPropertyFilterQuery(params: PropertyFilterParams): string {
   if (params.district) sp.set('district', params.district)
   if (params.minUsd != null) sp.set('minUsd', String(params.minUsd))
   if (params.maxUsd != null) sp.set('maxUsd', String(params.maxUsd))
+  if (params.minGel != null) sp.set('minGel', String(params.minGel))
+  if (params.maxGel != null) sp.set('maxGel', String(params.maxGel))
   if (params.rooms != null) sp.set('rooms', String(params.rooms))
+  if (params.features?.length) sp.set('features', params.features.join(','))
   for (const layout of params.layout ?? []) {
     sp.append('layout', layout)
   }

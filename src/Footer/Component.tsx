@@ -6,6 +6,8 @@ import React from 'react'
 import { ConsultationFormSection } from '@/components/forms/ConsultationFormSection'
 import { FooterNav } from '@/components/layout/Nav'
 
+import { FooterWithVisibility } from './FooterWithVisibility'
+
 type Props = {
   locale: Locale
 }
@@ -18,7 +20,8 @@ export async function Footer({ locale }: Props) {
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="gpi-footer mt-auto border-t border-gpi-border bg-gpi-bg-secondary text-gpi-text">
+    <FooterWithVisibility>
+      <footer className="gpi-footer mt-auto border-t border-gpi-border bg-gpi-bg-secondary text-gpi-text">
       {footerForm?.formType === 'consultation' ? (
         <ConsultationFormSection form={footerForm} locale={locale} />
       ) : null}
@@ -40,5 +43,6 @@ export async function Footer({ locale }: Props) {
         <FooterNav items={navItems} locale={locale} />
       </div>
     </footer>
+    </FooterWithVisibility>
   )
 }

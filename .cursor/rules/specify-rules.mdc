@@ -5,7 +5,7 @@ alwaysApply: true
 <!-- SPECKIT START -->
 Проект GPI — сайт агентства недвижимости на PayloadCMS + Next.js + React.
 
-**Актуальный план**: [specs/006-content-map/plan.md](specs/006-content-map/plan.md)
+**Актуальный план**: [specs/007-properties-map/plan.md](specs/007-properties-map/plan.md)
 
 Ключевые принципы (см. `.specify/memory/constitution.md`):
 - Спецификации на русском языке
@@ -17,11 +17,11 @@ alwaysApply: true
 - PageSpeed ≥ 90
 - Адаптивная вёрстка (mobile-first, от телефонов до десктопа)
 
-**Стек фичи 006-content-map**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet 1.9, react-leaflet 5, Vitest, Playwright.
+**Стек фичи 007-properties-map**: Payload CMS 3, Next.js 15, Tailwind CSS 4, Leaflet 1.9, react-leaflet 5, leaflet.markercluster, Vitest, Playwright.
 
-**Фокус фичи**: блок `mapBlock` в layout страниц Pages; интерактивный `MapPointPicker` в админке; публичная карта с маркером и компоновкой «текст + карта» (страница контактов); переиспользование `MapInner` из каталога объектов.
+**Фокус фичи**: полноэкранная страница `/{locale}/properties/map`; overlay-панель со списком объектов в viewport; общие фильтры с каталогом; кнопка «Посмотреть на карте»; кластеризация меток; без подвала на странице карты.
 
-**Структура**: `src/blocks/MapBlock/`, `src/components/maps/`, `src/lib/maps/`, `src/endpoints/seed/pages/contacts.ts`, `src/blocks/RenderBlocks.tsx`.
+**Структура**: `src/app/(frontend)/[locale]/properties/map/`, `src/components/maps/PropertiesMap*.tsx`, `src/lib/maps/bounds.ts`, расширение `PropertyFilters`, `src/Footer/Component.tsx`.
 
-**Команды**: см. [quickstart.md](specs/006-content-map/quickstart.md)
+**Команды**: см. [quickstart.md](specs/007-properties-map/quickstart.md)
 <!-- SPECKIT END -->

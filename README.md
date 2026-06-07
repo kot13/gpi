@@ -4,24 +4,44 @@
 
 Монорепозиторий на **Payload CMS 3 + Next.js 15**: публичный сайт (SSG/ISR) и панель управления контентом в одном приложении. Три языка: **ru**, **ka**, **en**.
 
+**Стек:** TypeScript, React 19, Tailwind CSS 4, PostgreSQL 16, Leaflet (карты), Vitest + Playwright.
+
 ## Возможности
 
-- **Страницы** — CRUD, черновики, публикация, локализация ru/ka/en
+### Контент и CMS
+
+- **Страницы** — CRUD, черновики, публикация, локализация ru/ka/en; layout-блоки (контент, медиа, CTA, архив, **карта**)
 - **Блог** — записи с заглавным изображением, описанием, контентом; рубрики опциональны
 - **Шапка и подвал** — навигация, соцсети, юридический блок (настраиваются в admin)
+- **Hero-слайдшоу** — слайдер на главной и landing-страницах
 - **SEO/GEO** — meta, Open Graph, JSON-LD, hreflang, sitemap
 - **Дизайн** — светлая тема GPI по [gpi-realty.ge](https://gpi-realty.ge/): Manrope/Unbounded, бордовый акцент `#7E2226`, burger-menu ≤980px
 
-Публичные URL:
+### Каталог недвижимости
+
+- **Коллекция `properties`** — объекты с адресом, координатами, ценами USD/GEL, характеристиками, галереей, локализацией
+- **Каталог** `/{locale}/properties` — список с фильтрами и сортировкой (URL-параметры)
+- **Карточка объекта** `/{locale}/properties/{objectCode}` — галерея, характеристики, карта, контакты
+- **Карта каталога** `/{locale}/properties/map` — полноэкранная карта с ценовыми метками, кластеризацией, панелью объектов в viewport, общими фильтрами с каталогом; без подвала
+
+### Формы
+
+- **Конструктор форм** в admin — тексты на ru/ka/en, размещение в подвале
+- **Заявка на консультацию** — форма в footer с выбором способа связи (Telegram, телефон и др.)
+
+### Публичные URL
 
 | Маршрут | Описание |
 |---------|----------|
 | `/` | редирект на `/ru` |
 | `/{locale}` | главная (`home`) |
-| `/{locale}/{slug}` | CMS-страницы |
+| `/{locale}/{slug}` | CMS-страницы (контакты, политика и т.д.) |
 | `/{locale}/blog` | список записей |
 | `/{locale}/blog/{slug}` | запись блога |
 | `/{locale}/blog/category/{slug}` | рубрика |
+| `/{locale}/properties` | каталог недвижимости |
+| `/{locale}/properties/map` | карта объектов (фильтры в query) |
+| `/{locale}/properties/{objectCode}` | карточка объекта |
 | `/admin` | панель Payload CMS |
 
 ### Design System (002-gpi-site-design)
@@ -52,7 +72,7 @@ CSS tokens: `src/app/(frontend)/globals.css` · Typed map: `src/lib/design/token
 
 ### Production
 
-| Комponent | Назначение |
+| Component | Назначение |
 |-----------|------------|
 | Node.js 20+ | запуск Next.js + Payload (`npm run start`) |
 | PostgreSQL 16 | хранение контента CMS |
@@ -110,6 +130,12 @@ npm run dev
 
 Демо-пользователь после seed: `demo-author@example.com` / `password`
 
+Опционально — seed 30+ объектов для теста кластеров на карте:
+
+```bash
+SEED_MAP_DENSITY=1 npm run seed
+```
+
 ### 4. Тесты
 
 ```bash
@@ -144,7 +170,7 @@ npm run start
 
 ```bash
 npm run build && npm run start
-# Lighthouse / PageSpeed Insights на /ru и /ru/blog
+# Lighthouse / PageSpeed Insights на /ru, /ru/properties, /ru/properties/map
 ```
 
 ---
@@ -219,6 +245,7 @@ CDN ставится **перед** origin-сервером и кеширует 
 | `/images/*`, `/favicon.*` | `public, max-age=86400` | статика из `public/` |
 | `/api/media/file/*` | `public, max-age=604800` | изображения CMS |
 | `/ru`, `/ka`, `/en`, `/ru/blog`, … | `public, s-maxage=600, stale-while-revalidate=86400` | HTML SSG/ISR |
+| `/ru/properties/map` | `public, s-maxage=600, stale-while-revalidate=86400` | client-heavy; Leaflet только на этой странице |
 | `/admin`, `/admin/*` | **Bypass cache** | только origin |
 | `/api/*` | **Bypass cache** | Payload REST/GraphQL |
 
@@ -259,16 +286,27 @@ npm run build && npm run start
 
 ```text
 src/
-├── app/(frontend)/[locale]/   # публичный сайт
-├── app/(payload)/             # admin + API
-├── collections/               # Pages, Posts, BlogCategories, Media, Users
-├── Header/, Footer/           # globals CMS
-├── components/                # UI, layout, blog
-├── lib/seo/, lib/i18n/        # SEO, локали
+├── app/(frontend)/[locale]/     # публичный сайт
+│   ├── [slug]/                  # CMS-страницы
+│   ├── blog/                    # блог
+│   └── properties/              # каталог, карта, карточки
+├── app/(payload)/               # admin + API
+├── blocks/                      # MapBlock и др. layout-блоки
+├── collections/                 # Pages, Posts, Properties, Forms, Media, Users
+├── components/
+│   ├── maps/                    # карта каталога, ContentMap, MapBlock
+│   ├── properties/              # каталог, фильтры, галерея
+│   └── forms/                   # заявка на консультацию
+├── Header/, Footer/             # globals CMS
+├── lib/
+│   ├── maps/                    # bounds, координаты, price markers
+│   ├── properties/              # фильтры, словари, форматирование цен
+│   ├── seo/, lib/i18n/          # SEO, локали
+│   └── design/tokens.ts
 └── payload.config.ts
 
-specs/001-cms-foundation/      # спецификация и plan
-tests/                         # unit, integration, e2e
+specs/                           # Spec Kit: spec, plan, tasks по фичам
+tests/                           # unit, integration, e2e
 ```
 
 ---
@@ -287,8 +325,21 @@ tests/                         # unit, integration, e2e
 
 ## Документация
 
-- [Спецификация](specs/001-cms-foundation/spec.md)
-- [План реализации](specs/001-cms-foundation/plan.md)
-- [Quickstart](specs/001-cms-foundation/quickstart.md)
+### Spec Kit (фичи проекта)
+
+| # | Фича | Спецификация |
+|---|------|--------------|
+| 001 | CMS foundation | [specs/001-cms-foundation/spec.md](specs/001-cms-foundation/spec.md) |
+| 002 | Дизайн-система | [specs/002-gpi-site-design/spec.md](specs/002-gpi-site-design/spec.md) |
+| 003 | Hero-слайдшоу | [specs/003-slideshow-layout/spec.md](specs/003-slideshow-layout/spec.md) |
+| 004 | Каталог недвижимости | [specs/004-property-catalog/spec.md](specs/004-property-catalog/spec.md) |
+| 005 | Конструктор форм | [specs/005-form-builder/spec.md](specs/005-form-builder/spec.md) |
+| 006 | Карта в контенте страниц | [specs/006-content-map/spec.md](specs/006-content-map/spec.md) |
+| 007 | Карта каталога | [specs/007-properties-map/spec.md](specs/007-properties-map/spec.md) |
+
+Quickstart по актуальной фиче карты: [specs/007-properties-map/quickstart.md](specs/007-properties-map/quickstart.md)
+
+### Внешние ресурсы
+
 - [Payload CMS](https://payloadcms.com/docs)
 - [Next.js Deployment](https://nextjs.org/docs/app/building-your-application/deploying)

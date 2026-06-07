@@ -74,3 +74,27 @@ export function generatePropertyCatalogMeta(locale: Locale, pageTitle?: string):
     }),
   }
 }
+
+export function generatePropertyMapMeta(locale: Locale): Metadata {
+  const baseUrl = getServerSideURL()
+  const path = `/${locale}/properties/map`
+
+  const languages: Record<string, string> = {}
+  for (const loc of LOCALES) {
+    languages[loc] = `${baseUrl}/${loc}/properties/map`
+  }
+
+  return {
+    title: 'Property map | GPI',
+    description: 'Interactive map of GPI real estate listings',
+    alternates: {
+      canonical: `${baseUrl}${path}`,
+      languages,
+    },
+    openGraph: mergeOpenGraph({
+      title: 'Property map',
+      description: 'Interactive map of GPI real estate listings',
+      url: `${baseUrl}${path}`,
+    }),
+  }
+}

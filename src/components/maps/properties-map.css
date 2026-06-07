@@ -1,0 +1,82 @@
+/* Scoped to properties catalog map (PropertiesMapInner) */
+
+.gpi-properties-map .leaflet-control-zoom {
+  border: none;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+
+.gpi-properties-map .leaflet-control-zoom a {
+  color: var(--color-gpi-text);
+  background: var(--color-gpi-bg);
+  border-color: var(--color-gpi-border);
+}
+
+.gpi-properties-map .leaflet-control-zoom a:hover {
+  color: var(--color-gpi-brand);
+  background: var(--color-gpi-bg-secondary);
+}
+
+.gpi-properties-map .marker-cluster-small,
+.gpi-properties-map .marker-cluster-medium,
+.gpi-properties-map .marker-cluster-large {
+  background-color: rgb(126 34 38 / 35%);
+}
+
+.gpi-properties-map .marker-cluster-small div,
+.gpi-properties-map .marker-cluster-medium div,
+.gpi-properties-map .marker-cluster-large div {
+  background-color: var(--color-gpi-brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+.gpi-properties-map .marker-cluster span {
+  color: #fff;
+}
+
+.gpi-properties-map .leaflet-oldie .marker-cluster-small,
+.gpi-properties-map .leaflet-oldie .marker-cluster-medium,
+.gpi-properties-map .leaflet-oldie .marker-cluster-large {
+  background-color: rgb(126 34 38 / 35%);
+}
+
+.gpi-properties-map .leaflet-oldie .marker-cluster-small div,
+.gpi-properties-map .leaflet-oldie .marker-cluster-medium div,
+.gpi-properties-map .leaflet-oldie .marker-cluster-large div {
+  background-color: var(--color-gpi-brand);
+  color: #fff;
+}
+
+.gpi-properties-map .gpi-map-price-marker {
+  background: transparent;
+  border: none;
+}
+
+.gpi-properties-map .gpi-map-price-label {
+  position: relative;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--color-gpi-bg);
+  border: 2px solid var(--color-gpi-brand);
+  color: var(--color-gpi-brand);
+  font-family: var(--font-gpi-body);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 18%);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.gpi-properties-map .gpi-map-price-label--active {
+  background: var(--color-gpi-brand);
+  border-color: var(--color-gpi-brand);
+  color: #fff;
+  z-index: 1000 !important;
+}
