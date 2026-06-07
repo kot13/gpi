@@ -1,3 +1,6 @@
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { home } from './home'
@@ -31,6 +34,8 @@ const collections: CollectionSlug[] = [
 const globals: GlobalSlug[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+
+const seedAssetsDir = path.join(process.cwd(), 'src/endpoints/seed')
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -94,18 +99,10 @@ export const seed = async ({
   payload.logger.info(`— Seeding media...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post2.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
-    ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
-    ),
+    readSeedAsset('image-post1.webp'),
+    readSeedAsset('image-post2.webp'),
+    readSeedAsset('image-post3.webp'),
+    readSeedAsset('image-hero1.webp'),
   ])
 
   const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
@@ -306,22 +303,16 @@ export const seed = async ({
   payload.logger.info('Seeded database successfully!')
 }
 
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
-  }
-
-  const data = await res.arrayBuffer()
+/** Load bundled seed images from repo (works offline on staging VPS). */
+async function readSeedAsset(filename: string): Promise<File> {
+  const filepath = path.join(seedAssetsDir, filename)
+  const data = await readFile(filepath)
+  const ext = path.extname(filename).slice(1) || 'webp'
 
   return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
+    name: filename,
+    data,
+    mimetype: `image/${ext}`,
     size: data.byteLength,
   }
 }
