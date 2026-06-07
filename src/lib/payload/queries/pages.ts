@@ -5,6 +5,22 @@ import type { Locale } from '@/lib/i18n/config'
 import { LOCALES } from '@/lib/i18n/config'
 import { getPayload } from '@/lib/payload/getPayload'
 
+export const getPublishedPageBySlug = cache(async (slug: string, locale: Locale) => {
+  const payload = await getPayload()
+
+  const result = await payload.find({
+    collection: 'pages',
+    locale,
+    draft: false,
+    limit: 1,
+    pagination: false,
+    overrideAccess: false,
+    where: { slug: { equals: slug } },
+  })
+
+  return result.docs?.[0] ?? null
+})
+
 export const getPageBySlug = cache(async (slug: string, locale: Locale) => {
   const { isEnabled: draft } = await draftMode()
   const payload = await getPayload()

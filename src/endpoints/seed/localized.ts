@@ -253,6 +253,27 @@ const notFoundLinkLabels: Record<Locale, string> = {
   en: 'Back to home',
 }
 
+const footerLegalCopy: Record<
+  Locale,
+  { companyName: string; address: string; copyrightText: string }
+> = {
+  ru: {
+    companyName: 'Georgia Private Investment LLC',
+    address: 'Грузия, г. Батуми, ул. Селим Химшиашвили, 17',
+    copyrightText: '© Georgia Private Investment 2019-2026',
+  },
+  ka: {
+    companyName: 'Georgia Private Investment LLC',
+    address: 'საქართველო, ქ. ბათუმი, სელიმ ხიმშიაშვილის ქ. 17',
+    copyrightText: '© Georgia Private Investment 2019-2026',
+  },
+  en: {
+    companyName: 'Georgia Private Investment LLC',
+    address: 'Georgia, Batumi city, Selim Khimshiashvili St. 17',
+    copyrightText: '© Georgia Private Investment 2019-2026',
+  },
+}
+
 type NavItemKey = 'home' | 'blog' | 'catalog' | 'contacts'
 
 const NAV_ITEM_ORDER: NavItemKey[] = ['home', 'blog', 'catalog', 'contacts']
@@ -320,6 +341,17 @@ function buildNavItemsWithIds(
  * Localized link labels live on shared array rows — create rows once (ru), then set
  * labels per locale using the same row ids.
  */
+async function seedFooterLegalContent(payload: Payload): Promise<void> {
+  for (const locale of LOCALES) {
+    await payload.updateGlobal({
+      slug: 'footer',
+      locale,
+      data: footerLegalCopy[locale],
+      context: { disableRevalidate: true },
+    })
+  }
+}
+
 async function seedGlobalNavItems(
   payload: Payload,
   slug: 'header' | 'footer',
@@ -340,7 +372,21 @@ async function seedGlobalNavItems(
 
   const rows = base.navItems
   if (!rows?.length) {
-    payload.logger.warn(`— ${slug}: nav items were not created`)
+    payload.logger.error(`— ${slug}: nav items were not created during seed`)
+    return
+  }
+
+  const hasRowIds = rows.every((item) => Boolean(item.id))
+  if (!hasRowIds) {
+    payload.logger.warn(`— ${slug}: nav item row ids missing, seeding per locale`)
+    for (const locale of LOCALES) {
+      await payload.updateGlobal({
+        slug,
+        locale,
+        data: { navItems: buildNavItems(locale, pageIds) },
+        context: { disableRevalidate: true },
+      })
+    }
     return
   }
 
@@ -442,6 +488,7 @@ export async function seedLocalizedContent(
     }
   }
 
+  await seedFooterLegalContent(payload)
   await seedGlobalNavItems(payload, 'header', pageIds)
   await seedGlobalNavItems(payload, 'footer', pageIds)
 

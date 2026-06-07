@@ -52,14 +52,29 @@ export function revalidateAllLocalePropertyPaths(objectCode: string): void {
   revalidateTag('properties-sitemap')
 }
 
+export function revalidateGlobalDataCaches(): void {
+  for (const locale of LOCALES) {
+    revalidateTag(`global_header_${locale}`)
+    revalidateTag(`global_footer_${locale}`)
+    revalidateTag(`footer_form_${locale}`)
+  }
+  revalidateTag('global_header')
+  revalidateTag('global_footer')
+  revalidateTag('footer_form')
+}
+
 export function revalidateGlobalLayout(): void {
   for (const locale of LOCALES) {
     revalidatePath(`/${locale}`, 'layout')
   }
-  for (const locale of LOCALES) {
-    revalidateTag(`global_header_${locale}`)
-    revalidateTag(`global_footer_${locale}`)
+  revalidateGlobalDataCaches()
+}
+
+/** Safe to call from seed CLI (outside Next.js request context). */
+export function revalidateGlobalDataCachesSafely(): void {
+  try {
+    revalidateGlobalDataCaches()
+  } catch {
+    // No-op outside Next.js (e.g. npm run seed without dev server)
   }
-  revalidateTag('global_header')
-  revalidateTag('global_footer')
 }

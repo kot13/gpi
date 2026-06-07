@@ -17,6 +17,8 @@ import { contactsPage } from './pages/contacts'
 import { privacyPolicyPage } from './pages/privacy-policy'
 import { propertiesPage } from './pages/properties'
 import { seedConsultationForm } from './forms'
+import { revalidateGlobalDataCachesSafely } from '@/hooks/revalidateFrontend'
+
 import { seedPropertiesCatalog } from './properties'
 import { seedPropertiesMapDensity } from './properties-map-density'
 
@@ -277,10 +279,7 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: {
-        companyName: 'Georgia Private Investment LLC',
         identificationNumber: '445623111',
-        address: 'Georgia, Batumi city, Selim Khimshiashvili St. 17',
-        copyrightText: '© Georgia Private Investment 2019-2026',
         navItems: [],
       },
       context: { disableRevalidate: true },
@@ -299,6 +298,9 @@ export const seed = async ({
   if (process.env.SEED_MAP_DENSITY === '1') {
     await seedPropertiesMapDensity(payload)
   }
+
+  payload.logger.info('— Revalidating layout caches...')
+  revalidateGlobalDataCachesSafely()
 
   payload.logger.info('Seeded database successfully!')
 }
